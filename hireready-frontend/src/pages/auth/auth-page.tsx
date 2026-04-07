@@ -44,8 +44,19 @@ export function AuthPage() {
         setIsLoading(false);
       }
     } else {
-      // Mock login for now
-      login(selectedRole);
+      try {
+        setIsLoading(true);
+        const response = await authApi.login({
+          email: formData.email,
+          password: formData.password,
+        });
+        toast.success('Welcome back!');
+        login(response.access_token);
+      } catch (error: any) {
+        toast.error(error.message || 'Invalid email or password');
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -227,7 +238,7 @@ export function AuthPage() {
                 variant="outline"
                 size="sm"
                 className="border-[#E5E5E5] text-[#1C1C1E] hover:bg-[#F3F4F6]"
-                onClick={() => login('job-seeker')}
+                onClick={() => login('demo-token', 'job-seeker')}
               >
                 Job Seeker
               </Button>
@@ -235,7 +246,7 @@ export function AuthPage() {
                 variant="outline"
                 size="sm"
                 className="border-[#E5E5E5] text-[#1C1C1E] hover:bg-[#F3F4F6]"
-                onClick={() => login('recruiter')}
+                onClick={() => login('demo-token', 'recruiter')}
               >
                 Recruiter
               </Button>
@@ -243,7 +254,7 @@ export function AuthPage() {
                 variant="outline"
                 size="sm"
                 className="border-[#E5E5E5] text-[#1C1C1E] hover:bg-[#F3F4F6]"
-                onClick={() => login('admin')}
+                onClick={() => login('demo-token', 'admin')}
               >
                 Admin
               </Button>

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import type { UserRole } from './types';
 
 type Page =
@@ -31,7 +31,7 @@ interface NavigationContextType {
   sidebarCollapsed: boolean;
   pageParams: any;
   navigate: (page: Page, params?: any) => void;
-  login: (role: UserRole) => void;
+  login: (token: string, fallbackRole?: UserRole) => void;
   logout: () => void;
   toggleSidebar: () => void;
 }
@@ -45,24 +45,62 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [pageParams, setPageParams] = useState<any>({});
 
+  const decodeToken = (token: string) => {
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      return JSON.parse(jsonPayload);
+    } catch (e) {
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem('auth_token');
+    if (token) {
+      const decoded = decodeToken(token);
+      if (decoded && decoded.role) {
+        setIsLoggedIn(true);
+        setCurrentRole(decoded.role as UserRole);
+      } else {
+        localStorage.removeItem('auth_token');
+      }
+    }
+  }, []);
+
   const navigate = (page: Page, params?: any) => {
     setCurrentPage(page);
     setPageParams(params || {});
   };
 
-  const login = (role: UserRole) => {
-    setCurrentRole(role);
-    setIsLoggedIn(true);
-    if (role === 'job-seeker') {
-      setCurrentPage('seeker-dashboard');
-    } else if (role === 'recruiter') {
-      setCurrentPage('recruiter-dashboard');
-    } else {
-      setCurrentPage('admin-dashboard');
+  const login = (token: string, fallbackRole?: UserRole) => {
+    let role = fallbackRole;
+    if (token !== 'demo-token') {
+      localStorage.setItem('auth_token', token);
+      const decoded = decodeToken(token);
+      if (decoded && decoded.role) {
+        role = decoded.role as UserRole;
+      }
+    }
+
+    if (role) {
+      setCurrentRole(role);
+      setIsLoggedIn(true);
+      if (role === 'job-seeker') {
+        setCurrentPage('seeker-dashboard');
+      } else if (role === 'recruiter') {
+        setCurrentPage('recruiter-dashboard');
+      } else {
+        setCurrentPage('admin-dashboard');
+      }
     }
   };
 
   const logout = () => {
+    localStorage.removeItem('auth_token');
     setCurrentRole(null);
     setIsLoggedIn(false);
     setCurrentPage('landing');
