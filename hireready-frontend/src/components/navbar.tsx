@@ -32,13 +32,13 @@ export function Navbar() {
             <Button
               variant="ghost"
               className="hidden text-white hover:bg-white/10 sm:inline-flex"
-              onClick={() => navigate('auth')}
+              onClick={() => navigate('auth', { mode: 'login' })}
             >
               Log In
             </Button>
             <Button
               className="bg-white text-[#1C1C1E] hover:bg-gray-200"
-              onClick={() => navigate('auth')}
+              onClick={() => navigate('auth', { mode: 'signup' })}
             >
               Get Started
             </Button>

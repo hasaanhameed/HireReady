@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigation } from '@/lib/navigation-context';
+import { authApi } from '@/api/endpoint/auth';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -11,13 +13,40 @@ import type { UserRole } from '@/lib/types';
 type AuthMode = 'login' | 'signup';
 
 export function AuthPage() {
-  const { navigate, login } = useNavigation();
-  const [mode, setMode] = useState<AuthMode>('login');
-  const [selectedRole, setSelectedRole] = useState<'job-seeker' | 'recruiter'>('job-seeker');
+  const { navigate, login, pageParams } = useNavigation();
+  const [mode, setMode] = useState<AuthMode>(pageParams?.mode || 'login');
+  const [selectedRole, setSelectedRole] = useState<'job-seeker' | 'recruiter'>(pageParams?.role || 'job-seeker');
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({ name: '', company: '', email: '', password: '' });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (pageParams?.mode) setMode(pageParams.mode);
+    if (pageParams?.role) setSelectedRole(pageParams.role);
+  }, [pageParams]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    login(selectedRole);
+    if (mode === 'signup') {
+      try {
+        setIsLoading(true);
+        await authApi.register({
+          name: formData.name || formData.email.split('@')[0], 
+          email: formData.email,
+          password: formData.password,
+          role: selectedRole
+        });
+        toast.success('Account Created');
+        setMode('login');
+        setFormData(prev => ({ ...prev, password: '' }));
+      } catch (error: any) {
+        toast.error(error.message || 'Failed to create account');
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      // Mock login for now
+      login(selectedRole);
+    }
   };
 
   return (
@@ -120,6 +149,8 @@ export function AuthPage() {
                     id="name"
                     placeholder="John Doe"
                     className="border-[#E5E5E5] bg-white pl-10"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   />
                 </div>
               </div>
@@ -135,6 +166,8 @@ export function AuthPage() {
                     id="company"
                     placeholder="TechCorp Inc."
                     className="border-[#E5E5E5] bg-white pl-10"
+                    value={formData.company}
+                    onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                   />
                 </div>
               </div>
@@ -152,6 +185,9 @@ export function AuthPage() {
                   type="email"
                   placeholder={mode === 'signup' && selectedRole === 'recruiter' ? 'you@company.com' : 'you@example.com'}
                   className="border-[#E5E5E5] bg-white pl-10"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  required
                 />
               </div>
             </div>
@@ -166,6 +202,9 @@ export function AuthPage() {
                   type="password"
                   placeholder="Enter your password"
                   className="border-[#E5E5E5] bg-white pl-10"
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  required
                 />
               </div>
             </div>
@@ -173,9 +212,10 @@ export function AuthPage() {
             {/* Submit Button */}
             <Button
               type="submit"
+              disabled={isLoading}
               className="w-full bg-[#111827] text-white hover:bg-[#1C1C1E]"
             >
-              {mode === 'login' ? 'Log In' : 'Create Account'}
+              {isLoading ? 'Processing...' : (mode === 'login' ? 'Log In' : 'Create Account')}
             </Button>
           </form>
 

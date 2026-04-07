@@ -29,7 +29,8 @@ interface NavigationContextType {
   currentRole: UserRole | null;
   isLoggedIn: boolean;
   sidebarCollapsed: boolean;
-  navigate: (page: Page) => void;
+  pageParams: any;
+  navigate: (page: Page, params?: any) => void;
   login: (role: UserRole) => void;
   logout: () => void;
   toggleSidebar: () => void;
@@ -42,9 +43,11 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
   const [currentRole, setCurrentRole] = useState<UserRole | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [pageParams, setPageParams] = useState<any>({});
 
-  const navigate = (page: Page) => {
+  const navigate = (page: Page, params?: any) => {
     setCurrentPage(page);
+    setPageParams(params || {});
   };
 
   const login = (role: UserRole) => {
@@ -76,6 +79,7 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
         currentRole,
         isLoggedIn,
         sidebarCollapsed,
+        pageParams,
         navigate,
         login,
         logout,

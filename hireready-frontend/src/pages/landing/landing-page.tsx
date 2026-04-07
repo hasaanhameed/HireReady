@@ -53,16 +53,15 @@ export function LandingPage() {
             <Button
               size="lg"
               className="w-full bg-white text-[#1C1C1E] hover:bg-gray-200 sm:w-auto"
-              onClick={() => navigate('auth')}
+              onClick={() => navigate('auth', { mode: 'signup', role: 'job-seeker' })}
             >
               Get Started as Job Seeker
-              <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
             <Button
               size="lg"
               variant="outline"
               className="w-full border-white bg-transparent text-white hover:bg-white/10 sm:w-auto"
-              onClick={() => navigate('auth')}
+              onClick={() => navigate('auth', { mode: 'signup', role: 'recruiter' })}
             >
               Post a Job as Recruiter
             </Button>

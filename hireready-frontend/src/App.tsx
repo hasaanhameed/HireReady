@@ -3,6 +3,7 @@
 import { NavigationProvider, useNavigation } from '@/lib/navigation-context';
 import { Navbar } from '@/components/navbar';
 import { Sidebar } from '@/components/sidebar';
+import { Toaster } from 'sonner';
 
 // Pages
 import { LandingPage } from '@/pages/landing/landing-page';
@@ -125,6 +126,7 @@ export default function Home() {
   return (
     <NavigationProvider>
       <PageRouter />
+      <Toaster position="bottom-right" theme='dark' />
     </NavigationProvider>
   );
 }
