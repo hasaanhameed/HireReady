@@ -103,7 +103,7 @@ function PageRouter() {
         <Navbar />
         <div className="flex min-h-[calc(100vh-4rem)]">
           <Sidebar />
-          <main className={`flex-1 bg-[#F5F5F5] p-4 transition-all md:p-6 ${sidebarCollapsed ? 'md:ml-16' : 'md:ml-0'}`}>
+          <main className={`flex-1 bg-background p-4 transition-all md:p-6 ${sidebarCollapsed ? 'md:ml-16' : 'md:ml-0'}`}>
             <div className="mx-auto max-w-7xl">
               {renderPage()}
             </div>

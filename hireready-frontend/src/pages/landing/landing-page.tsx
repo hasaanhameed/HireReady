@@ -41,18 +41,18 @@ export function LandingPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="bg-[#1C1C1E] px-4 py-20 md:px-6 md:py-32">
+      <section className="bg-graphite px-4 py-20 md:px-6 md:py-32">
         <div className="mx-auto max-w-4xl text-center">
-          <h1 className="text-balance text-4xl font-bold tracking-tight text-white md:text-5xl lg:text-6xl">
+          <h1 className="text-balance text-4xl font-bold tracking-tight text-cloud md:text-5xl lg:text-6xl">
             Know exactly what&apos;s standing between you and your dream job
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-pretty text-lg text-[#9CA3AF] md:text-xl">
+          <p className="mx-auto mt-6 max-w-2xl text-pretty text-lg text-mist/80 md:text-xl">
             Upload your resume, choose your target role, and get a detailed skill gap analysis with a personalized learning roadmap to close the gap.
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button
               size="lg"
-              className="w-full bg-white text-[#1C1C1E] hover:bg-gray-200 sm:w-auto"
+              className="w-full bg-sienna text-warm-white hover:bg-sienna/90 sm:w-auto"
               onClick={() => navigate('auth', { mode: 'signup', role: 'job-seeker' })}
             >
               Get Started as Job Seeker
@@ -60,7 +60,7 @@ export function LandingPage() {
             <Button
               size="lg"
               variant="outline"
-              className="w-full border-white bg-transparent text-white hover:bg-white/10 sm:w-auto"
+              className="w-full border-mist bg-transparent text-mist hover:bg-mist/10 sm:w-auto"
               onClick={() => navigate('auth', { mode: 'signup', role: 'recruiter' })}
             >
               Post a Job as Recruiter
@@ -70,20 +70,20 @@ export function LandingPage() {
       </section>
 
       {/* Job Seekers Section */}
-      <section className="bg-white px-4 py-20 md:px-6">
+      <section className="bg-warm-white px-4 py-20 md:px-6">
         <div className="mx-auto max-w-6xl">
-          <h2 className="text-center text-3xl font-bold text-[#1C1C1E] mb-4">
+          <h2 className="text-center text-3xl font-bold text-graphite mb-4 font-heading">
             For Job Seekers
           </h2>
-          <p className="text-center text-lg text-[#6B7280] mb-12 max-w-2xl mx-auto">
+          <p className="text-center text-lg text-slate mb-12 max-w-2xl mx-auto">
             Bridge the gap between where you are and where you want to be
           </p>
           <div className="mt-16 grid gap-8 md:grid-cols-3">
             {seekerFeatures.map((feature) => (
               <Card key={feature.title} className="border-none shadow-sm">
                 <CardContent className="p-8">
-                  <h3 className="text-xl font-semibold text-[#1C1C1E]">{feature.title}</h3>
-                  <p className="mt-3 text-[#6B7280]">{feature.description}</p>
+                  <h3 className="text-xl font-bold text-graphite font-heading">{feature.title}</h3>
+                  <p className="mt-3 text-slate">{feature.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -92,20 +92,20 @@ export function LandingPage() {
       </section>
 
       {/* Recruiters Section */}
-      <section className="bg-[#F5F5F5] px-4 py-20 md:px-6">
+      <section className="bg-cloud px-4 py-20 md:px-6">
         <div className="mx-auto max-w-6xl">
-          <h2 className="text-center text-3xl font-bold text-[#1C1C1E] mb-4">
+          <h2 className="text-center text-3xl font-bold text-graphite mb-4 font-heading">
             For Recruiters
           </h2>
-          <p className="text-center text-lg text-[#6B7280] mb-12 max-w-2xl mx-auto">
+          <p className="text-center text-lg text-slate mb-12 max-w-2xl mx-auto">
             Find the right candidates faster with skill-based matching and insights
           </p>
           <div className="grid gap-8 md:grid-cols-3">
             {recruiterFeatures.map((feature) => (
               <Card key={feature.title} className="border-none shadow-sm">
                 <CardContent className="p-8">
-                  <h3 className="text-xl font-semibold text-[#1C1C1E]">{feature.title}</h3>
-                  <p className="mt-3 text-[#6B7280]">{feature.description}</p>
+                  <h3 className="text-xl font-bold text-graphite font-heading">{feature.title}</h3>
+                  <p className="mt-3 text-slate">{feature.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -120,22 +120,22 @@ export function LandingPage() {
 
 
       {/* Footer */}
-      <footer className="border-t border-[#E5E5E5] bg-white px-4 py-12 md:px-6">
+      <footer className="border-t border-mist bg-cloud px-4 py-12 md:px-6">
         <div className="mx-auto max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div className="md:col-span-1">
-              <h3 className="text-lg font-semibold text-[#1C1C1E] mb-2">HireReady</h3>
-              <p className="text-sm text-[#6B7280]">
+              <h3 className="text-lg font-bold text-graphite mb-2 font-heading">HireReady</h3>
+              <p className="text-sm text-slate">
                 Bridging skill gaps and connecting talent with opportunity.
               </p>
             </div>
             <div>
-              <h4 className="font-semibold text-[#1C1C1E] mb-4">Resources</h4>
+              <h4 className="font-bold text-graphite mb-4 font-heading">Resources</h4>
               <ul className="space-y-2">
                 <li>
                   <button
                     onClick={() => navigate('landing')}
-                    className="text-sm text-[#6B7280] hover:text-[#1C1C1E] transition-colors"
+                    className="text-sm text-slate hover:text-sienna transition-colors"
                   >
                     Home
                   </button>
@@ -143,33 +143,33 @@ export function LandingPage() {
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold text-[#1C1C1E] mb-4">Legal</h4>
+              <h4 className="font-bold text-graphite mb-4 font-heading">Legal</h4>
               <ul className="space-y-2">
                 <li>
-                  <a href="#" className="text-sm text-[#6B7280] hover:text-[#1C1C1E] transition-colors">
+                  <a href="#" className="text-sm text-slate hover:text-sienna transition-colors">
                     Terms and Conditions
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-sm text-[#6B7280] hover:text-[#1C1C1E] transition-colors">
+                  <a href="#" className="text-sm text-slate hover:text-sienna transition-colors">
                     Privacy
                   </a>
                 </li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold text-[#1C1C1E] mb-4">Support</h4>
+              <h4 className="font-bold text-graphite mb-4 font-heading">Support</h4>
               <ul className="space-y-2">
                 <li>
-                  <a href="#" className="text-sm text-[#6B7280] hover:text-[#1C1C1E] transition-colors">
+                  <a href="#" className="text-sm text-slate hover:text-sienna transition-colors">
                     Contact Us
                   </a>
                 </li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-[#E5E5E5] pt-8">
-            <p className="text-center text-sm text-[#6B7280]">
+          <div className="border-t border-mist pt-8">
+            <p className="text-center text-sm text-slate">
               © 2026 HireReady. All rights reserved.
             </p>
           </div>

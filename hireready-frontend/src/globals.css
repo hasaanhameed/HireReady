@@ -3,86 +3,125 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@font-face {
+  font-family: 'Raleway';
+  src: url('/assets/fonts/Raleway-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Raleway';
+  src: url('/assets/fonts/Raleway-Italic-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+}
+
 :root {
-  --background: #F5F5F5;
-  --foreground: #1C1C1E;
-  --card: #FFFFFF;
-  --card-foreground: #1C1C1E;
-  --popover: #FFFFFF;
-  --popover-foreground: #1C1C1E;
-  --primary: #111827;
-  --primary-foreground: #FFFFFF;
-  --secondary: #2D2D2D;
-  --secondary-foreground: #FFFFFF;
-  --muted: #E5E5E5;
-  --muted-foreground: #6B7280;
-  --accent: #2D2D2D;
-  --accent-foreground: #FFFFFF;
-  --destructive: #4B5563;
-  --destructive-foreground: #FFFFFF;
-  --border: #D1D5DB;
-  --input: #FFFFFF;
-  --ring: #6B7280;
-  --chart-1: #1C1C1E;
-  --chart-2: #2D2D2D;
-  --chart-3: #4B5563;
-  --chart-4: #6B7280;
-  --chart-5: #9CA3AF;
-  --radius: 0.625rem;
-  --sidebar: #FFFFFF;
-  --sidebar-foreground: #1C1C1E;
-  --sidebar-primary: #111827;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #F3F4F6;
-  --sidebar-accent-foreground: #1C1C1E;
-  --sidebar-border: #E5E7EB;
-  --sidebar-ring: #6B7280;
-  --navbar: #1C1C1E;
-  --navbar-foreground: #FFFFFF;
+  /* Brand Colors */
+  --warm-white: #FAFAF7;
+  --cloud: #F1EFE8;
+  --mist: #D3D1C7;
+  --slate: #888780;
+  --graphite: #444441;
+  --sienna: #C4845A;
+
+  --background: var(--warm-white);
+  --foreground: var(--graphite);
+  
+  --card: var(--cloud);
+  --card-foreground: var(--graphite);
+  
+  --popover: var(--warm-white);
+  --popover-foreground: var(--graphite);
+  
+  --primary: var(--sienna);
+  --primary-foreground: var(--warm-white);
+  
+  --secondary: var(--slate);
+  --secondary-foreground: var(--warm-white);
+  
+  --muted: var(--mist);
+  --muted-foreground: var(--slate);
+  
+  --accent: var(--sienna);
+  --accent-foreground: var(--warm-white);
+  
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  
+  --border: var(--mist);
+  --input: var(--warm-white);
+  --ring: var(--sienna);
+  
+  --radius: 0.75rem;
+
+  --sidebar: var(--warm-white);
+  --sidebar-foreground: var(--graphite);
+  --sidebar-primary: var(--sienna);
+  --sidebar-primary-foreground: var(--warm-white);
+  --sidebar-accent: var(--cloud);
+  --sidebar-accent-foreground: var(--sienna);
+  --sidebar-border: var(--mist);
+  --sidebar-ring: var(--sienna);
+
+  --navbar: var(--graphite);
+  --navbar-foreground: var(--warm-white);
 }
 
 .dark {
-  --background: #1C1C1E;
-  --foreground: #F5F5F5;
-  --card: #2D2D2D;
-  --card-foreground: #F5F5F5;
-  --popover: #2D2D2D;
-  --popover-foreground: #F5F5F5;
-  --primary: #FFFFFF;
-  --primary-foreground: #111827;
-  --secondary: #4B5563;
-  --secondary-foreground: #FFFFFF;
-  --muted: #374151;
-  --muted-foreground: #9CA3AF;
-  --accent: #4B5563;
-  --accent-foreground: #FFFFFF;
-  --destructive: #6B7280;
-  --destructive-foreground: #FFFFFF;
-  --border: #374151;
-  --input: #374151;
-  --ring: #6B7280;
-  --chart-1: #F5F5F5;
-  --chart-2: #D1D5DB;
-  --chart-3: #9CA3AF;
-  --chart-4: #6B7280;
-  --chart-5: #4B5563;
-  --sidebar: #2D2D2D;
-  --sidebar-foreground: #F5F5F5;
-  --sidebar-primary: #FFFFFF;
-  --sidebar-primary-foreground: #111827;
-  --sidebar-accent: #374151;
-  --sidebar-accent-foreground: #F5F5F5;
-  --sidebar-border: #374151;
-  --sidebar-ring: #6B7280;
-  --navbar: #1C1C1E;
-  --navbar-foreground: #FFFFFF;
+  --background: #333330; /* Deep Espresso */
+  --foreground: var(--cloud);
+  
+  --card: var(--graphite);
+  --card-foreground: var(--cloud);
+  
+  --popover: var(--graphite);
+  --popover-foreground: var(--cloud);
+  
+  --primary: var(--sienna);
+  --primary-foreground: var(--warm-white);
+  
+  --secondary: var(--mist);
+  --secondary-foreground: var(--graphite);
+  
+  --muted: var(--slate);
+  --muted-foreground: var(--mist);
+  
+  --accent: var(--sienna);
+  --accent-foreground: var(--warm-white);
+  
+  --destructive: #7f1d1d;
+  --destructive-foreground: #ffffff;
+  
+  --border: var(--graphite);
+  --input: var(--graphite);
+  --ring: var(--sienna);
+
+  --sidebar: var(--graphite);
+  --sidebar-foreground: var(--cloud);
+  --sidebar-primary: var(--sienna);
+  --sidebar-primary-foreground: var(--warm-white);
+  --sidebar-accent: #3d3d3a;
+  --sidebar-accent-foreground: var(--cloud);
+  --sidebar-border: #3d3d3a;
+  --sidebar-ring: var(--sienna);
+
+  --navbar: #262624;
+  --navbar-foreground: var(--warm-white);
 }
 
 @theme inline {
-  --font-sans: 'Inter', 'Geist', 'Geist Fallback';
-  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
-  --color-navbar: var(--navbar);
-  --color-navbar-foreground: var(--navbar-foreground);
+  --font-sans: 'Raleway', 'Inter', sans-serif;
+  --font-heading: 'Raleway', sans-serif;
+  
+  --color-warm-white: var(--warm-white);
+  --color-cloud: var(--cloud);
+  --color-mist: var(--mist);
+  --color-slate: var(--slate);
+  --color-graphite: var(--graphite);
+  --color-sienna: var(--sienna);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -102,15 +141,7 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -119,6 +150,14 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-navbar: var(--navbar);
+  --color-navbar-foreground: var(--navbar-foreground);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
 @layer base {
@@ -126,6 +165,12 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-bold tracking-tight;
+  }
+  button {
+    @apply font-heading;
   }
 }

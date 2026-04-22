@@ -6,13 +6,13 @@ export function Navbar() {
   const { currentRole, isLoggedIn, navigate, logout, toggleSidebar } = useNavigation();
 
   return (
-    <nav className="sticky top-0 z-50 flex h-16 items-center justify-between bg-[#1C1C1E] px-4 md:px-6">
+    <nav className="sticky top-0 z-50 flex h-16 items-center justify-between bg-navbar px-4 md:px-6">
       <div className="flex items-center gap-4">
         {isLoggedIn && (
           <Button
             variant="ghost"
             size="icon"
-            className="text-white hover:bg-white/10 md:hidden"
+            className="text-navbar-foreground hover:bg-white/10 md:hidden"
             onClick={toggleSidebar}
           >
             <Menu className="h-5 w-5" />
@@ -22,7 +22,7 @@ export function Navbar() {
           onClick={() => navigate(isLoggedIn ? (currentRole === 'job-seeker' ? 'seeker-dashboard' : currentRole === 'recruiter' ? 'recruiter-dashboard' : 'admin-dashboard') : 'landing')}
           className="flex items-center gap-2"
         >
-          <span className="text-lg font-semibold text-white">HireReady</span>
+          <span className="text-lg font-bold tracking-tight text-navbar-foreground font-heading">HireReady</span>
         </button>
       </div>
 
@@ -31,13 +31,13 @@ export function Navbar() {
           <>
             <Button
               variant="ghost"
-              className="hidden text-white hover:bg-white/10 sm:inline-flex"
+              className="hidden text-navbar-foreground hover:bg-white/10 sm:inline-flex"
               onClick={() => navigate('auth', { mode: 'login' })}
             >
               Log In
             </Button>
             <Button
-              className="bg-white text-[#1C1C1E] hover:bg-gray-200"
+              className="bg-sienna text-warm-white hover:bg-sienna/90"
               onClick={() => navigate('auth', { mode: 'signup' })}
             >
               Get Started
@@ -47,16 +47,16 @@ export function Navbar() {
           <>
             <div className="mr-2 hidden items-center gap-2 sm:flex">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20">
-                <User className="h-4 w-4 text-white" />
+                <User className="h-4 w-4 text-navbar-foreground" />
               </div>
-              <span className="text-sm text-white">
+              <span className="text-sm text-navbar-foreground">
                 {currentRole === 'job-seeker' ? 'Job Seeker' : currentRole === 'recruiter' ? 'Recruiter' : 'Admin'}
               </span>
             </div>
             <Button
               variant="ghost"
               size="icon"
-              className="text-white hover:bg-white/10"
+              className="text-navbar-foreground hover:bg-white/10"
               onClick={logout}
             >
               <LogOut className="h-5 w-5" />
