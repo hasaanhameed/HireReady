@@ -207,4 +207,19 @@
   .animate-liquid {
     animation: var(--animation-liquid);
   }
+
+  @keyframes ticker-up {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-ticker {
+    animation: ticker-up 0.5s cubic-bezier(0, 0, 0.2, 1) forwards;
+  }
 }

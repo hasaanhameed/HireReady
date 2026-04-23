@@ -35,8 +35,20 @@ const recruiterFeatures = [
 
 
 
+import { useState, useEffect } from 'react';
+
+const roles = ["dream job", "career move", "tech role", "perfect match", "next step"];
+
 export function LandingPage() {
   const { navigate } = useNavigation();
+  const [roleIndex, setRoleIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRoleIndex((prev) => (prev + 1) % roles.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background animate-liquid">
@@ -44,7 +56,15 @@ export function LandingPage() {
       <section className="bg-navbar px-4 py-20 md:px-6 md:py-32">
         <div className="mx-auto max-w-4xl text-center animate-liquid">
           <h1 className="text-balance text-4xl font-bold tracking-tight text-cloud md:text-5xl lg:text-6xl">
-            Know exactly what&apos;s standing between you and your dream job
+            Know exactly what&apos;s standing between you and your
+            <div className="mt-2 h-[1.2em] overflow-hidden">
+              <span 
+                key={roles[roleIndex]} 
+                className="inline-block text-sienna animate-ticker"
+              >
+                {roles[roleIndex]}
+              </span>
+            </div>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-pretty text-lg text-navbar-foreground/80 md:text-xl">
             Upload your resume, choose your target role, and get a detailed skill gap analysis with a personalized learning roadmap to close the gap.
