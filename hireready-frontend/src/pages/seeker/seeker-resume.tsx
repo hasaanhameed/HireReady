@@ -52,17 +52,17 @@ export function SeekerResume() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#1C1C1E]">Resume Upload</h1>
-        <p className="mt-1 text-[#6B7280]">
+        <h1 className="text-2xl font-bold text-foreground">Resume Upload</h1>
+        <p className="mt-1 text-muted-foreground">
           Upload your resume to extract skills and analyze your job fit
         </p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Upload Section */}
-        <Card className="border-none shadow-sm">
+        <Card className="border-border/50 shadow-sm bg-card">
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-semibold text-[#1C1C1E]">
+            <CardTitle className="text-lg font-semibold text-foreground">
               Upload Resume
             </CardTitle>
           </CardHeader>
@@ -76,21 +76,21 @@ export function SeekerResume() {
               className={cn(
                 "relative rounded-lg border-2 border-dashed p-8 text-center transition-colors",
                 dragActive
-                  ? "border-[#2D2D2D] bg-[#F9FAFB]"
-                  : "border-[#D1D5DB] hover:border-[#9CA3AF]"
+                  ? "border-sienna bg-sienna/5"
+                  : "border-border hover:border-muted-foreground"
               )}
             >
               {uploadedFile ? (
                 <div className="flex items-center justify-center gap-3">
-                  <FileText className="h-8 w-8 text-[#6B7280]" />
+                  <FileText className="h-8 w-8 text-muted-foreground" />
                   <div className="text-left">
-                    <p className="font-medium text-[#1C1C1E]">{uploadedFile}</p>
-                    <p className="text-sm text-[#6B7280]">Ready to analyze</p>
+                    <p className="font-medium text-foreground">{uploadedFile}</p>
+                    <p className="text-sm text-muted-foreground">Ready to analyze</p>
                   </div>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="ml-2"
+                    className="ml-2 cursor-pointer"
                     onClick={() => setUploadedFile(null)}
                   >
                     <X className="h-4 w-4" />
@@ -98,11 +98,11 @@ export function SeekerResume() {
                 </div>
               ) : (
                 <>
-                  <Upload className="mx-auto h-12 w-12 text-[#9CA3AF]" />
-                  <p className="mt-4 text-sm font-medium text-[#1C1C1E]">
+                  <Upload className="mx-auto h-12 w-12 text-muted-foreground" />
+                  <p className="mt-4 text-sm font-medium text-foreground">
                     Drag and drop your resume here
                   </p>
-                  <p className="mt-1 text-xs text-[#6B7280]">
+                  <p className="mt-1 text-xs text-muted-foreground">
                     or click to browse (PDF, DOC, DOCX)
                   </p>
                   <input
@@ -117,26 +117,26 @@ export function SeekerResume() {
 
             {/* Target Role Input */}
             <div className="relative">
-              <label className="mb-2 block text-sm font-medium text-[#1C1C1E]">
+              <label className="mb-2 block text-sm font-medium text-foreground">
                 Target Role
               </label>
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#9CA3AF]" />
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   value={targetRole}
                   onChange={(e) => setTargetRole(e.target.value)}
                   onFocus={() => setShowSuggestions(true)}
                   onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                   placeholder="e.g., Senior Frontend Developer"
-                  className="border-[#E5E5E5] bg-white pl-10"
+                  className="border-border bg-background pl-10"
                 />
               </div>
               {showSuggestions && targetRole && filteredSuggestions.length > 0 && (
-                <div className="absolute z-10 mt-1 w-full rounded-lg border border-[#E5E5E5] bg-white shadow-lg">
+                <div className="absolute z-10 mt-1 w-full rounded-lg border border-border bg-card shadow-lg overflow-hidden">
                   {filteredSuggestions.map((role) => (
                     <button
                       key={role}
-                      className="w-full px-4 py-2 text-left text-sm text-[#1C1C1E] hover:bg-[#F3F4F6]"
+                      className="w-full px-4 py-2 text-left text-sm text-foreground hover:bg-muted transition-colors cursor-pointer"
                       onClick={() => {
                         setTargetRole(role);
                         setShowSuggestions(false);
@@ -150,7 +150,7 @@ export function SeekerResume() {
             </div>
 
             <Button
-              className="w-full bg-[#2D2D2D] text-white hover:bg-[#1C1C1E]"
+              className="w-full bg-sienna text-warm-white hover:bg-sienna/90 cursor-pointer disabled:opacity-50"
               disabled={!uploadedFile || !targetRole}
               onClick={handleAnalyze}
             >
@@ -160,18 +160,18 @@ export function SeekerResume() {
         </Card>
 
         {/* Extracted Skills Section */}
-        <Card className="border-none shadow-sm">
+        <Card className="border-border/50 shadow-sm bg-card">
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-semibold text-[#1C1C1E]">
+            <CardTitle className="text-lg font-semibold text-foreground">
               {analyzed ? 'Extracted Skills' : 'Your Current Skills'}
             </CardTitle>
           </CardHeader>
           <CardContent>
             {analyzed ? (
               <div className="space-y-4">
-                <div className="flex items-center gap-2 rounded-lg bg-[#F3F4F6] p-3">
-                  <CheckCircle className="h-5 w-5 text-[#2D2D2D]" />
-                  <span className="text-sm text-[#1C1C1E]">
+                <div className="flex items-center gap-2 rounded-lg bg-muted/50 p-3">
+                  <CheckCircle className="h-5 w-5 text-sienna" />
+                  <span className="text-sm text-foreground">
                     Analysis complete! Found {currentJobSeeker.currentSkills.length} skills
                   </span>
                 </div>
@@ -181,7 +181,7 @@ export function SeekerResume() {
                   ))}
                 </div>
                 <div className="pt-4">
-                  <h4 className="mb-2 text-sm font-medium text-[#1C1C1E]">
+                  <h4 className="mb-2 text-sm font-medium text-foreground">
                     Additional skills detected:
                   </h4>
                   <div className="flex flex-wrap gap-2">
@@ -193,7 +193,7 @@ export function SeekerResume() {
               </div>
             ) : (
               <div className="space-y-4">
-                <p className="text-sm text-[#6B7280]">
+                <p className="text-sm text-muted-foreground">
                   These are the skills from your most recent resume:
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -208,9 +208,9 @@ export function SeekerResume() {
       </div>
 
       {/* Resume History */}
-      <Card className="border-none shadow-sm">
+      <Card className="border-border/50 shadow-sm bg-card">
         <CardHeader className="pb-2">
-          <CardTitle className="text-lg font-semibold text-[#1C1C1E]">
+          <CardTitle className="text-lg font-semibold text-foreground">
             Resume History
           </CardTitle>
         </CardHeader>
@@ -219,16 +219,16 @@ export function SeekerResume() {
             {currentJobSeeker.resumeHistory.map((resume, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between rounded-lg border border-[#E5E5E5] bg-white p-4"
+                className="flex items-center justify-between rounded-lg border border-border bg-background p-4 hover:bg-muted/5 transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <FileText className="h-5 w-5 text-[#6B7280]" />
+                  <FileText className="h-5 w-5 text-muted-foreground" />
                   <div>
-                    <p className="font-medium text-[#1C1C1E]">{resume.filename}</p>
-                    <p className="text-sm text-[#6B7280]">{resume.date}</p>
+                    <p className="font-medium text-foreground">{resume.filename}</p>
+                    <p className="text-sm text-muted-foreground">{resume.date}</p>
                   </div>
                 </div>
-                <Button variant="outline" size="sm" className="border-[#E5E5E5]">
+                <Button variant="outline" size="sm" className="border-border text-foreground hover:bg-muted cursor-pointer">
                   Download
                 </Button>
               </div>

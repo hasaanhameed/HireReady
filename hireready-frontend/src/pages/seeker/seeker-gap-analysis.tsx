@@ -12,26 +12,26 @@ export function SeekerGapAnalysis() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#1C1C1E]">Gap Analysis Results</h1>
-        <p className="mt-1 text-[#6B7280]">
+        <h1 className="text-2xl font-bold text-foreground">Gap Analysis Results</h1>
+        <p className="mt-1 text-muted-foreground">
           See how your skills match up against the requirements for {gapAnalysis.targetRole}
         </p>
       </div>
 
       {/* Target Role Header */}
-      <Card className="border-none shadow-sm">
+      <Card className="border-border/50 shadow-sm bg-card">
         <CardContent className="p-6">
           <div className="flex flex-col items-center gap-6 md:flex-row md:items-start md:justify-between">
             <div>
-              <p className="text-sm text-[#6B7280]">Target Role</p>
-              <h2 className="mt-1 text-2xl font-bold text-[#1C1C1E]">{gapAnalysis.targetRole}</h2>
-              <p className="mt-2 text-[#6B7280]">
+              <p className="text-sm text-muted-foreground">Target Role</p>
+              <h2 className="mt-1 text-2xl font-bold text-foreground font-heading">{gapAnalysis.targetRole}</h2>
+              <p className="mt-2 text-muted-foreground">
                 Based on {gapAnalysis.skillsYouHave.length + gapAnalysis.skillsMissing.length} required skills
               </p>
             </div>
             <div className="flex flex-col items-center">
               <MatchScoreRing score={gapAnalysis.overallMatch} size="lg" />
-              <p className="mt-2 text-sm text-[#6B7280]">Overall Match Score</p>
+              <p className="mt-2 text-sm text-muted-foreground">Overall Match Score</p>
             </div>
           </div>
         </CardContent>
@@ -40,10 +40,10 @@ export function SeekerGapAnalysis() {
       {/* Skills Comparison */}
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Skills You Have */}
-        <Card className="border-none shadow-sm">
+        <Card className="border-border/50 shadow-sm bg-card">
           <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#1C1C1E]">
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#2D2D2D] text-xs text-white">
+            <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-sienna text-[10px] text-warm-white font-bold">
                 {gapAnalysis.skillsYouHave.length}
               </span>
               Skills You Have
@@ -59,10 +59,10 @@ export function SeekerGapAnalysis() {
         </Card>
 
         {/* Skills You're Missing */}
-        <Card className="border-none shadow-sm">
+        <Card className="border-border/50 shadow-sm bg-card">
           <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#1C1C1E]">
-              <span className="flex h-6 w-6 items-center justify-center rounded-full border-2 border-[#6B7280] text-xs text-[#6B7280]">
+            <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full border-2 border-muted-foreground text-[10px] text-muted-foreground font-bold">
                 {gapAnalysis.skillsMissing.length}
               </span>
               Skills You&apos;re Missing
@@ -79,10 +79,10 @@ export function SeekerGapAnalysis() {
       </div>
 
       {/* Missing Skills by Importance */}
-      <Card className="border-none shadow-sm">
+      <Card className="border-border/50 shadow-sm bg-card">
         <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#1C1C1E]">
-            <TrendingUp className="h-5 w-5 text-[#6B7280]" />
+          <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground">
+            <TrendingUp className="h-5 w-5 text-sienna" />
             Missing Skills Ranked by Market Importance
           </CardTitle>
         </CardHeader>
@@ -92,16 +92,16 @@ export function SeekerGapAnalysis() {
               <div key={skill.name} className="space-y-2">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#F3F4F6] text-xs font-medium text-[#6B7280]">
+                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-muted text-[10px] font-bold text-muted-foreground">
                       {index + 1}
                     </span>
-                    <span className="font-medium text-[#1C1C1E]">{skill.name}</span>
+                    <span className="font-medium text-foreground">{skill.name}</span>
                   </div>
-                  <span className="text-sm text-[#6B7280]">{skill.importance}% importance</span>
+                  <span className="text-sm text-muted-foreground">{skill.importance}% importance</span>
                 </div>
-                <div className="ml-9 h-2 w-full overflow-hidden rounded-full bg-[#E5E5E5]">
+                <div className="ml-9 h-2 w-full overflow-hidden rounded-full bg-muted/20">
                   <div
-                    className="h-full rounded-full bg-[#6B7280] transition-all duration-500"
+                    className="h-full rounded-full bg-sienna transition-all duration-500"
                     style={{ width: `${skill.importance}%` }}
                   />
                 </div>
@@ -112,16 +112,16 @@ export function SeekerGapAnalysis() {
       </Card>
 
       {/* CTA */}
-      <Card className="border-none bg-[#F9FAFB] shadow-sm">
+      <Card className="border-border/50 bg-navbar text-navbar-foreground shadow-sm">
         <CardContent className="flex flex-col items-center justify-between gap-4 p-6 md:flex-row">
           <div>
-            <h3 className="text-lg font-semibold text-[#1C1C1E]">Ready to close the gap?</h3>
-            <p className="mt-1 text-[#6B7280]">
+            <h3 className="text-lg font-semibold text-navbar-foreground font-heading">Ready to close the gap?</h3>
+            <p className="mt-1 text-navbar-foreground/70">
               Follow our personalized learning roadmap to acquire the missing skills
             </p>
           </div>
           <Button
-            className="w-full bg-[#111827] text-white hover:bg-[#1C1C1E] md:w-auto"
+            className="w-full bg-sienna text-warm-white hover:bg-sienna/90 md:w-auto cursor-pointer"
             onClick={() => navigate('seeker-roadmap')}
           >
             View Learning Roadmap

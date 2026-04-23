@@ -3,75 +3,55 @@ import { platformStats, analyticsData } from '@/lib/mock-data';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { TrendingUp, Users, Briefcase, Search } from 'lucide-react';
 
-const COLORS = ['#1C1C1E', '#4B5563', '#9CA3AF'];
+const COLORS = ['hsl(var(--sienna))', 'hsl(var(--slate))', 'hsl(var(--mist))'];
 
 export function AdminAnalytics() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#1C1C1E]">Analytics</h1>
-        <p className="mt-1 text-[#6B7280]">
+        <h1 className="text-2xl font-bold text-foreground">Analytics</h1>
+        <p className="mt-1 text-muted-foreground">
           Platform statistics and insights
         </p>
       </div>
 
       {/* Stats Cards */}
       <div className="grid gap-4 md:grid-cols-4">
-        <Card className="border-none shadow-sm">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="rounded-lg bg-[#F3F4F6] p-2">
-                <Users className="h-5 w-5 text-[#6B7280]" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-[#1C1C1E]">
-                  {platformStats.totalUsers}
-                </p>
-                <p className="text-sm text-[#6B7280]">Total Users</p>
-              </div>
+        <Card className="border-border/50 shadow-sm bg-card">
+          <CardContent className="p-6">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">Total Users</p>
+              <p className="mt-2 text-3xl font-bold text-foreground font-heading">
+                {platformStats.totalUsers}
+              </p>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-none shadow-sm">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="rounded-lg bg-[#F3F4F6] p-2">
-                <Search className="h-5 w-5 text-[#6B7280]" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-[#1C1C1E]">
-                  {platformStats.activeJobSeekers}
-                </p>
-                <p className="text-sm text-[#6B7280]">Active Seekers</p>
-              </div>
+        <Card className="border-border/50 shadow-sm bg-card">
+          <CardContent className="p-6">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">Active Seekers</p>
+              <p className="mt-2 text-3xl font-bold text-foreground font-heading">
+                {platformStats.activeJobSeekers}
+              </p>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-none shadow-sm">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="rounded-lg bg-[#F3F4F6] p-2">
-                <Briefcase className="h-5 w-5 text-[#6B7280]" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-[#1C1C1E]">
-                  {platformStats.totalJobPostings}
-                </p>
-                <p className="text-sm text-[#6B7280]">Job Postings</p>
-              </div>
+        <Card className="border-border/50 shadow-sm bg-card">
+          <CardContent className="p-6">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">Job Postings</p>
+              <p className="mt-2 text-3xl font-bold text-foreground font-heading">
+                {platformStats.totalJobPostings}
+              </p>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-none shadow-sm">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="rounded-lg bg-[#F3F4F6] p-2">
-                <TrendingUp className="h-5 w-5 text-[#6B7280]" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-[#1C1C1E]">+29%</p>
-                <p className="text-sm text-[#6B7280]">Monthly Growth</p>
-              </div>
+        <Card className="border-border/50 shadow-sm bg-card">
+          <CardContent className="p-6">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">Monthly Growth</p>
+              <p className="mt-2 text-3xl font-bold text-sienna font-heading">+29%</p>
             </div>
           </CardContent>
         </Card>
@@ -79,9 +59,9 @@ export function AdminAnalytics() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Most Searched Roles */}
-        <Card className="border-none shadow-sm">
+        <Card className="border-border/50 shadow-sm bg-card">
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-semibold text-[#1C1C1E]">
+            <CardTitle className="text-lg font-semibold text-foreground">
               Most Searched Job Roles
             </CardTitle>
           </CardHeader>
@@ -100,17 +80,18 @@ export function AdminAnalytics() {
                     axisLine={false}
                     tickLine={false}
                     width={130}
-                    tick={{ fill: '#6B7280', fontSize: 12 }}
+                    tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
                   />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: '#1C1C1E',
-                      border: 'none',
+                      backgroundColor: 'hsl(var(--card))',
+                      border: '1px solid hsl(var(--border))',
                       borderRadius: '8px',
-                      color: '#fff',
+                      color: 'hsl(var(--foreground))',
                     }}
+                    itemStyle={{ color: 'hsl(var(--foreground))' }}
                   />
-                  <Bar dataKey="searches" fill="#2D2D2D" radius={[0, 4, 4, 0]} />
+                  <Bar dataKey="searches" fill="hsl(var(--sienna))" radius={[0, 4, 4, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -118,9 +99,9 @@ export function AdminAnalytics() {
         </Card>
 
         {/* User Distribution */}
-        <Card className="border-none shadow-sm">
+        <Card className="border-border/50 shadow-sm bg-card">
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-semibold text-[#1C1C1E]">
+            <CardTitle className="text-lg font-semibold text-foreground">
               User Role Distribution
             </CardTitle>
           </CardHeader>
@@ -143,15 +124,16 @@ export function AdminAnalytics() {
                   </Pie>
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: '#1C1C1E',
-                      border: 'none',
+                      backgroundColor: 'hsl(var(--card))',
+                      border: '1px solid hsl(var(--border))',
                       borderRadius: '8px',
-                      color: '#fff',
+                      color: 'hsl(var(--foreground))',
                     }}
+                    itemStyle={{ color: 'hsl(var(--foreground))' }}
                   />
                   <Legend
                     formatter={(value) => (
-                      <span style={{ color: '#6B7280', fontSize: 12 }}>{value}</span>
+                      <span className="text-xs text-muted-foreground">{value}</span>
                     )}
                   />
                 </PieChart>
@@ -162,9 +144,9 @@ export function AdminAnalytics() {
       </div>
 
       {/* Platform Growth */}
-      <Card className="border-none shadow-sm">
+      <Card className="border-border/50 shadow-sm bg-card">
         <CardHeader className="pb-2">
-          <CardTitle className="text-lg font-semibold text-[#1C1C1E]">
+          <CardTitle className="text-lg font-semibold text-foreground">
             Platform Growth Over Time
           </CardTitle>
         </CardHeader>
@@ -176,28 +158,29 @@ export function AdminAnalytics() {
                   dataKey="month"
                   axisLine={false}
                   tickLine={false}
-                  tick={{ fill: '#6B7280', fontSize: 12 }}
+                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
                 />
                 <YAxis
                   axisLine={false}
                   tickLine={false}
-                  tick={{ fill: '#6B7280', fontSize: 12 }}
+                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: '#1C1C1E',
-                    border: 'none',
+                    backgroundColor: 'hsl(var(--card))',
+                    border: '1px solid hsl(var(--border))',
                     borderRadius: '8px',
-                    color: '#fff',
+                    color: 'hsl(var(--foreground))',
                   }}
+                  itemStyle={{ color: 'hsl(var(--foreground))' }}
                   formatter={(value: number) => [`${value} users`, 'Total Users']}
                 />
                 <Line
                   type="monotone"
                   dataKey="users"
-                  stroke="#2D2D2D"
+                  stroke="hsl(var(--sienna))"
                   strokeWidth={2}
-                  dot={{ fill: '#1C1C1E', strokeWidth: 2 }}
+                  dot={{ fill: 'hsl(var(--sienna))', strokeWidth: 2 }}
                 />
               </LineChart>
             </ResponsiveContainer>

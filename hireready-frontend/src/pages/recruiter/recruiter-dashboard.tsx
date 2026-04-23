@@ -17,10 +17,10 @@ export function RecruiterDashboard() {
     <div className="space-y-6">
       {/* Welcome Section */}
       <div>
-        <h1 className="text-2xl font-bold text-[#1C1C1E]">
+        <h1 className="text-2xl font-bold text-foreground">
           Welcome back, {currentRecruiter.name.split(' ')[0]}
         </h1>
-        <p className="mt-1 text-[#6B7280]">
+        <p className="mt-1 text-muted-foreground">
           Here&apos;s an overview of your recruitment activity at {currentRecruiter.companyName}
         </p>
       </div>
@@ -30,35 +30,31 @@ export function RecruiterDashboard() {
         <StatsCard
           title="Total Postings"
           value={recruiterStats.totalPostings}
-          icon={Briefcase}
         />
         <StatsCard
           title="Total Applicants"
           value={recruiterStats.totalApplicants}
-          icon={Users}
         />
         <StatsCard
           title="Average Match Score"
           value={`${recruiterStats.avgMatchScore}%`}
-          icon={TrendingUp}
         />
         <StatsCard
           title="Pending Reviews"
           value={recruiterStats.pendingReviews}
-          icon={Clock}
         />
       </div>
 
       {/* Recent Job Postings */}
-      <Card className="border-none shadow-sm">
+      <Card className="border-border/50 shadow-sm bg-card">
         <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-lg font-semibold text-[#1C1C1E]">
+          <CardTitle className="text-lg font-semibold text-foreground">
             Recent Job Postings
           </CardTitle>
           <Button
             variant="ghost"
             size="sm"
-            className="text-[#6B7280] hover:text-[#1C1C1E]"
+            className="text-muted-foreground hover:text-foreground cursor-pointer"
             onClick={() => navigate('recruiter-postings')}
           >
             View All
@@ -69,35 +65,36 @@ export function RecruiterDashboard() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-[#E5E5E5]">
-                  <th className="pb-3 text-left text-sm font-medium text-[#6B7280]">Position</th>
-                  <th className="pb-3 text-left text-sm font-medium text-[#6B7280]">Posted</th>
-                  <th className="pb-3 text-left text-sm font-medium text-[#6B7280]">Applicants</th>
-                  <th className="pb-3 text-left text-sm font-medium text-[#6B7280]">Avg Match</th>
-                  <th className="pb-3 text-left text-sm font-medium text-[#6B7280]">Actions</th>
+               <thead>
+                <tr className="border-b border-border">
+                  <th className="pb-3 text-left text-sm font-medium text-muted-foreground">Position</th>
+                  <th className="pb-3 text-left text-sm font-medium text-muted-foreground">Posted</th>
+                  <th className="pb-3 text-left text-sm font-medium text-muted-foreground">Applicants</th>
+                  <th className="pb-3 text-left text-sm font-medium text-muted-foreground">Avg Match</th>
+                  <th className="pb-3 text-left text-sm font-medium text-muted-foreground">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {recruiterJobPostings.map((job) => (
-                  <tr key={job.id} className="border-b border-[#E5E5E5] last:border-0">
+                  <tr key={job.id} className="border-b border-border last:border-0 hover:bg-muted/10 transition-colors">
                     <td className="py-4">
                       <div>
-                        <p className="font-medium text-[#1C1C1E]">{job.title}</p>
-                        <p className="text-sm text-[#6B7280] capitalize">{job.jobType}</p>
+                        <p className="font-medium text-foreground">{job.title}</p>
+                        <p className="text-sm text-muted-foreground capitalize">{job.jobType}</p>
                       </div>
                     </td>
-                    <td className="py-4 text-sm text-[#6B7280]">{job.postedDate}</td>
+                    <td className="py-4 text-sm text-muted-foreground">{job.postedDate}</td>
                     <td className="py-4">
-                      <span className="inline-flex items-center rounded-full bg-[#F3F4F6] px-2 py-0.5 text-sm font-medium text-[#1C1C1E]">
+                      <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-sm font-medium text-foreground">
                         {job.applicantCount}
                       </span>
                     </td>
                     <td className="py-4">
                       <span className={cn(
                         "inline-flex rounded-full px-2 py-0.5 text-xs font-medium",
-                        job.avgMatchScore >= 70 ? "bg-[#2D2D2D] text-white" :
-                        job.avgMatchScore >= 50 ? "bg-[#9CA3AF] text-white" :
-                        "bg-[#E5E5E5] text-[#6B7280]"
+                        job.avgMatchScore >= 70 ? "bg-sienna text-warm-white" :
+                        job.avgMatchScore >= 50 ? "bg-slate text-warm-white" :
+                        "bg-muted text-muted-foreground"
                       )}>
                         {job.avgMatchScore}%
                       </span>
@@ -106,7 +103,7 @@ export function RecruiterDashboard() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="text-[#6B7280] hover:text-[#1C1C1E]"
+                        className="text-muted-foreground hover:text-foreground cursor-pointer"
                         onClick={() => navigate('recruiter-applicants')}
                       >
                         <Eye className="mr-1 h-4 w-4" />
@@ -122,15 +119,15 @@ export function RecruiterDashboard() {
       </Card>
 
       {/* Top Applicants */}
-      <Card className="border-none shadow-sm">
+      <Card className="border-border/50 shadow-sm bg-card">
         <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-lg font-semibold text-[#1C1C1E]">
+          <CardTitle className="text-lg font-semibold text-foreground">
             Top Applicants
           </CardTitle>
           <Button
             variant="ghost"
             size="sm"
-            className="text-[#6B7280] hover:text-[#1C1C1E]"
+            className="text-muted-foreground hover:text-foreground cursor-pointer"
             onClick={() => navigate('recruiter-applicants')}
           >
             View All
@@ -142,17 +139,17 @@ export function RecruiterDashboard() {
             {topApplicants.map((applicant) => (
               <div
                 key={applicant.id}
-                className="flex items-center justify-between rounded-lg border border-[#E5E5E5] bg-white p-4"
+                className="flex items-center justify-between rounded-lg border border-border bg-background p-4 transition-all hover:bg-muted/10"
               >
                 <div className="flex items-center gap-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#F3F4F6]">
-                    <span className="text-sm font-medium text-[#6B7280]">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
+                    <span className="text-sm font-medium text-muted-foreground">
                       {applicant.seekerName.split(' ').map(n => n[0]).join('')}
                     </span>
                   </div>
                   <div>
-                    <p className="font-medium text-[#1C1C1E]">{applicant.seekerName}</p>
-                    <p className="text-sm text-[#6B7280]">
+                    <p className="font-medium text-foreground">{applicant.seekerName}</p>
+                    <p className="text-sm text-muted-foreground">
                       Applied for Senior Frontend Developer
                     </p>
                   </div>
@@ -160,9 +157,9 @@ export function RecruiterDashboard() {
                 <div className="flex items-center gap-4">
                   <span className={cn(
                     "rounded-full px-3 py-1 text-sm font-medium",
-                    applicant.matchScore >= 70 ? "bg-[#2D2D2D] text-white" :
-                    applicant.matchScore >= 50 ? "bg-[#9CA3AF] text-white" :
-                    "bg-[#E5E5E5] text-[#6B7280]"
+                    applicant.matchScore >= 70 ? "bg-sienna text-warm-white" :
+                    applicant.matchScore >= 50 ? "bg-slate text-warm-white" :
+                    "bg-muted text-muted-foreground"
                   )}>
                     {applicant.matchScore}% match
                   </span>

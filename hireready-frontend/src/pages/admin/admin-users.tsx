@@ -16,21 +16,21 @@ export function AdminUsers() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#1C1C1E]">Users Management</h1>
-        <p className="mt-1 text-[#6B7280]">
+        <h1 className="text-2xl font-bold text-foreground">Users Management</h1>
+        <p className="mt-1 text-muted-foreground">
           View and manage all platform users
         </p>
       </div>
 
       {/* Filters */}
-      <Card className="border-none shadow-sm">
+      <Card className="border-border/50 shadow-sm bg-card">
         <CardContent className="flex items-center gap-4 p-4">
           <div className="flex items-center gap-2">
-            <Users className="h-5 w-5 text-[#6B7280]" />
-            <span className="text-sm font-medium text-[#1C1C1E]">Filter by Role:</span>
+            <Users className="h-5 w-5 text-muted-foreground" />
+            <span className="text-sm font-medium text-foreground">Filter by Role:</span>
           </div>
           <Select value={roleFilter} onValueChange={setRoleFilter}>
-            <SelectTrigger className="w-48 border-[#E5E5E5] bg-white">
+            <SelectTrigger className="w-48 border-border bg-background">
               <SelectValue placeholder="All Roles" />
             </SelectTrigger>
             <SelectContent>
@@ -39,16 +39,16 @@ export function AdminUsers() {
               <SelectItem value="recruiter">Recruiters</SelectItem>
             </SelectContent>
           </Select>
-          <span className="ml-auto text-sm text-[#6B7280]">
+          <span className="ml-auto text-sm text-muted-foreground">
             Showing {filteredUsers.length} users
           </span>
         </CardContent>
       </Card>
 
       {/* Users Table */}
-      <Card className="border-none shadow-sm">
+      <Card className="border-border/50 shadow-sm bg-card">
         <CardHeader className="pb-2">
-          <CardTitle className="text-lg font-semibold text-[#1C1C1E]">
+          <CardTitle className="text-lg font-semibold text-foreground">
             All Users
           </CardTitle>
         </CardHeader>
@@ -56,44 +56,44 @@ export function AdminUsers() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-[#E5E5E5]">
-                  <th className="pb-3 text-left text-sm font-medium text-[#6B7280]">Name</th>
-                  <th className="pb-3 text-left text-sm font-medium text-[#6B7280]">Role</th>
-                  <th className="pb-3 text-left text-sm font-medium text-[#6B7280]">Join Date</th>
-                  <th className="pb-3 text-left text-sm font-medium text-[#6B7280]">Status</th>
-                  <th className="pb-3 text-left text-sm font-medium text-[#6B7280]">Actions</th>
+                <tr className="border-b border-border">
+                  <th className="pb-3 text-left text-sm font-medium text-muted-foreground">Name</th>
+                  <th className="pb-3 text-left text-sm font-medium text-muted-foreground">Role</th>
+                  <th className="pb-3 text-left text-sm font-medium text-muted-foreground">Join Date</th>
+                  <th className="pb-3 text-left text-sm font-medium text-muted-foreground">Status</th>
+                  <th className="pb-3 text-left text-sm font-medium text-muted-foreground">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredUsers.map((user) => (
-                  <tr key={user.id} className="border-b border-[#E5E5E5] last:border-0">
+                  <tr key={user.id} className="border-b border-border last:border-0 hover:bg-muted/10 transition-colors">
                     <td className="py-4">
                       <div className="flex items-center gap-3">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F3F4F6]">
-                          <span className="text-xs font-medium text-[#6B7280]">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted">
+                          <span className="text-xs font-medium text-muted-foreground">
                             {user.name.split(' ').map(n => n[0]).join('')}
                           </span>
                         </div>
-                        <span className="font-medium text-[#1C1C1E]">{user.name}</span>
+                        <span className="font-medium text-foreground">{user.name}</span>
                       </div>
                     </td>
                     <td className="py-4">
                       <span className={cn(
                         "rounded-full px-2 py-0.5 text-xs font-medium capitalize",
                         user.role === 'job-seeker' 
-                          ? "bg-[#F3F4F6] text-[#6B7280]" 
-                          : "bg-[#2D2D2D] text-white"
+                          ? "bg-muted text-muted-foreground" 
+                          : "bg-sienna/20 text-sienna border border-sienna/30"
                       )}>
                         {user.role.replace('-', ' ')}
                       </span>
                     </td>
-                    <td className="py-4 text-sm text-[#6B7280]">{user.joinDate}</td>
+                    <td className="py-4 text-sm text-muted-foreground">{user.joinDate}</td>
                     <td className="py-4">
                       <span className={cn(
                         "rounded-full px-2 py-0.5 text-xs font-medium capitalize",
                         user.status === 'active' 
-                          ? "bg-[#E5E5E5] text-[#1C1C1E]" 
-                          : "bg-[#9CA3AF] text-white"
+                          ? "bg-sienna/10 text-sienna" 
+                          : "bg-muted text-muted-foreground"
                       )}>
                         {user.status}
                       </span>
@@ -103,7 +103,7 @@ export function AdminUsers() {
                         <Button
                           size="sm"
                           variant="outline"
-                          className="border-[#E5E5E5] text-[#6B7280]"
+                          className="border-border text-muted-foreground hover:bg-muted cursor-pointer"
                         >
                           <Ban className="mr-1 h-3 w-3" />
                           {user.status === 'active' ? 'Suspend' : 'Activate'}
@@ -111,7 +111,7 @@ export function AdminUsers() {
                         <Button
                           size="sm"
                           variant="outline"
-                          className="border-[#E5E5E5] text-[#6B7280]"
+                          className="border-border text-muted-foreground hover:text-red-500 hover:border-red-500 cursor-pointer"
                         >
                           <Trash2 className="h-3 w-3" />
                         </Button>

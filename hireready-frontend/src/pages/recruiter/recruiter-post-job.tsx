@@ -38,17 +38,17 @@ export function RecruiterPostJob() {
   if (submitted) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <Card className="max-w-md border-none shadow-sm">
+        <Card className="max-w-md border-border/50 shadow-sm bg-card">
           <CardContent className="p-8 text-center">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#2D2D2D]">
-              <CheckCircle className="h-8 w-8 text-white" />
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-sienna">
+              <CheckCircle className="h-8 w-8 text-warm-white" />
             </div>
-            <h2 className="text-2xl font-bold text-[#1C1C1E]">Job Posted Successfully!</h2>
-            <p className="mt-2 text-[#6B7280]">
+            <h2 className="text-2xl font-bold text-foreground font-heading">Job Posted Successfully!</h2>
+            <p className="mt-2 text-muted-foreground">
               Your job posting is now live and candidates can start applying.
             </p>
             <Button
-              className="mt-6 bg-[#2D2D2D] text-white hover:bg-[#1C1C1E]"
+              className="mt-6 bg-sienna text-warm-white hover:bg-sienna/90 cursor-pointer"
               onClick={() => setSubmitted(false)}
             >
               Post Another Job
@@ -62,8 +62,8 @@ export function RecruiterPostJob() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#1C1C1E]">Post a Job</h1>
-        <p className="mt-1 text-[#6B7280]">
+        <h1 className="text-2xl font-bold text-foreground">Post a Job</h1>
+        <p className="mt-1 text-muted-foreground">
           Create a new job posting and start receiving applications
         </p>
       </div>
@@ -71,33 +71,33 @@ export function RecruiterPostJob() {
       <form onSubmit={handleSubmit}>
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Left Column */}
-          <Card className="border-none shadow-sm">
+          <Card className="border-border/50 shadow-sm bg-card">
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg font-semibold text-[#1C1C1E]">
+              <CardTitle className="text-lg font-semibold text-foreground">
                 Job Details
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="title" className="text-[#1C1C1E]">
+                <Label htmlFor="title" className="text-foreground">
                   Job Title
                 </Label>
                 <Input
                   id="title"
                   placeholder="e.g., Senior Frontend Developer"
-                  className="border-[#E5E5E5] bg-white"
+                  className="border-border bg-background"
                   required
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="description" className="text-[#1C1C1E]">
+                <Label htmlFor="description" className="text-foreground">
                   Job Description
                 </Label>
                 <Textarea
                   id="description"
                   placeholder="Describe the role, responsibilities, and what you're looking for..."
-                  className="min-h-[200px] border-[#E5E5E5] bg-white"
+                  className="min-h-[200px] border-border bg-background"
                   required
                 />
               </div>
@@ -106,27 +106,27 @@ export function RecruiterPostJob() {
 
           {/* Right Column */}
           <div className="space-y-6">
-            <Card className="border-none shadow-sm">
+            <Card className="border-border/50 shadow-sm bg-card">
               <CardHeader className="pb-2">
-                <CardTitle className="text-lg font-semibold text-[#1C1C1E]">
+                <CardTitle className="text-lg font-semibold text-foreground">
                   Requirements
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label className="text-[#1C1C1E]">Required Skills</Label>
+                  <Label className="text-foreground">Required Skills</Label>
                   <div className="flex gap-2">
                     <Input
                       value={skillInput}
                       onChange={(e) => setSkillInput(e.target.value)}
                       onKeyDown={handleKeyDown}
                       placeholder="Add a skill (e.g., React)"
-                      className="border-[#E5E5E5] bg-white"
+                      className="border-border bg-background"
                     />
                     <Button
                       type="button"
                       variant="outline"
-                      className="shrink-0 border-[#E5E5E5]"
+                      className="shrink-0 border-border cursor-pointer hover:bg-muted"
                       onClick={addSkill}
                     >
                       <Plus className="h-4 w-4" />
@@ -137,13 +137,13 @@ export function RecruiterPostJob() {
                       {skills.map((skill) => (
                         <span
                           key={skill}
-                          className="inline-flex items-center gap-1 rounded-full bg-[#2D2D2D] px-3 py-1 text-sm text-white"
+                          className="inline-flex items-center gap-1 rounded-full bg-sienna/10 px-3 py-1 text-sm text-sienna font-medium border border-sienna/20"
                         >
                           {skill}
                           <button
                             type="button"
                             onClick={() => removeSkill(skill)}
-                            className="hover:text-gray-300"
+                            className="hover:text-sienna/70 transition-colors cursor-pointer"
                           >
                             <X className="h-3 w-3" />
                           </button>
@@ -154,9 +154,9 @@ export function RecruiterPostJob() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-[#1C1C1E]">Experience Level</Label>
+                  <Label className="text-foreground">Experience Level</Label>
                   <Select>
-                    <SelectTrigger className="border-[#E5E5E5] bg-white">
+                    <SelectTrigger className="border-border bg-background">
                       <SelectValue placeholder="Select experience level" />
                     </SelectTrigger>
                     <SelectContent>
@@ -169,9 +169,9 @@ export function RecruiterPostJob() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-[#1C1C1E]">Job Type</Label>
+                  <Label className="text-foreground">Job Type</Label>
                   <Select>
-                    <SelectTrigger className="border-[#E5E5E5] bg-white">
+                    <SelectTrigger className="border-border bg-background">
                       <SelectValue placeholder="Select job type" />
                     </SelectTrigger>
                     <SelectContent>
@@ -187,7 +187,7 @@ export function RecruiterPostJob() {
 
             <Button
               type="submit"
-              className="w-full bg-[#2D2D2D] text-white hover:bg-[#1C1C1E]"
+              className="w-full bg-sienna text-warm-white hover:bg-sienna/90 cursor-pointer"
             >
               Post Job
             </Button>
