@@ -2,6 +2,8 @@ import { useNavigation } from '@/lib/navigation-context';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ArrowRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useTheme } from '@/components/theme-provider';
 
 const seekerFeatures = [
   {
@@ -35,12 +37,13 @@ const recruiterFeatures = [
 
 
 
-import { useState, useEffect } from 'react';
+
 
 const roles = ["dream job", "career move", "tech role", "perfect match", "next step"];
 
 export function LandingPage() {
   const { navigate } = useNavigation();
+  const { theme } = useTheme();
   const [roleIndex, setRoleIndex] = useState(0);
 
   useEffect(() => {
@@ -53,23 +56,23 @@ export function LandingPage() {
   return (
     <div className="min-h-screen bg-background animate-liquid">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-navbar px-4 py-20 md:px-6 md:py-32">
+      <section className="relative overflow-hidden bg-navbar px-4 pt-20 pb-56 md:px-6 md:pt-32 md:pb-80">
         {/* Bridge Illustration */}
-        <div
-          className="absolute bottom-0 left-0 right-0 opacity-40 pointer-events-none select-none"
-          style={{
+        <div 
+          className="absolute bottom-0 left-0 right-0 pointer-events-none select-none"
+          style={{ 
             maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
             WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'
           }}
         >
           <img
-            src="/assets/images/hero_bridge.png"
+            src={theme === 'dark' ? '/assets/images/hero_bridge_dark.png' : '/assets/images/hero_bridge_light.png'}
             alt="Bridge illustration"
             className="w-full h-auto block"
           />
         </div>
 
-        <div className="relative mx-auto max-w-4xl text-center animate-liquid">
+        <div className="relative mx-auto max-w-4xl text-center animate-liquid -mt-12 md:-mt-20">
           <h1 className="text-balance text-4xl font-bold tracking-tight text-cloud md:text-5xl lg:text-6xl">
             Know exactly what&apos;s standing between you and your
             <div className="mt-2 h-[1.2em] overflow-hidden">
@@ -84,7 +87,7 @@ export function LandingPage() {
           <p className="mx-auto mt-6 max-w-2xl text-pretty text-lg text-navbar-foreground/80 md:text-xl">
             Upload your resume, choose your target role, and get a detailed skill gap analysis with a personalized learning roadmap to close the gap.
           </p>
-          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row md:mt-16">
             <Button
               size="lg"
               className="w-full bg-sienna text-warm-white hover:bg-sienna/90 sm:w-auto"
