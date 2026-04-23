@@ -7,6 +7,8 @@ import { cn } from '@/lib/utils';
 const COLORS = ['var(--sienna)', 'var(--slate)', 'var(--mist)'];
 
 export function AdminAnalytics() {
+  const filteredUserDistribution = analyticsData.userDistribution.filter(d => d.name !== 'Admins');
+
   return (
     <div className="space-y-6 animate-liquid">
       <div>
@@ -19,7 +21,7 @@ export function AdminAnalytics() {
       {/* Stats Cards */}
       <div className="grid gap-4 md:grid-cols-4">
         {[
-          { label: 'Total Users', value: platformStats.totalUsers, growth: '+12%' },
+          { label: 'Total Users', value: platformStats.totalUsers - 3, growth: '+12%' },
           { label: 'Active Seekers', value: platformStats.activeJobSeekers, growth: '+8%' },
           { label: 'Job Postings', value: platformStats.totalJobPostings, growth: '+24%' },
           { label: 'Monthly Growth', value: '+29%', highlight: true },
@@ -99,7 +101,7 @@ export function AdminAnalytics() {
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
-                    data={analyticsData.userDistribution}
+                    data={filteredUserDistribution}
                     cx="50%"
                     cy="50%"
                     innerRadius={60}
@@ -107,7 +109,7 @@ export function AdminAnalytics() {
                     paddingAngle={2}
                     dataKey="value"
                   >
-                    {analyticsData.userDistribution.map((entry, index) => (
+                    {filteredUserDistribution.map((entry, index) => (
                       <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>

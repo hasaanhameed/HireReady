@@ -21,7 +21,7 @@ export function AdminDashboard() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatsCard
           title="Total Users"
-          value={platformStats.totalUsers}
+          value={platformStats.totalUsers - 3}
         />
         <StatsCard
           title="Active Job Seekers"
