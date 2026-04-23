@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigation } from '@/lib/navigation-context';
-import { authApi } from '@/api/endpoint/auth';
+import { useAuth } from '@/hooks/use-auth';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,15 +8,15 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { User, Building2, Mail, Lock, ArrowLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import type { UserRole } from '@/lib/types';
+import type { LoginRequest, UserSignupRequest } from '@/lib/types/auth';
 
 type AuthMode = 'login' | 'signup';
 
 export function AuthPage() {
-  const { navigate, login, pageParams } = useNavigation();
+  const { navigate, login: navLogin, pageParams } = useNavigation();
+  const { login, register, isLoading } = useAuth();
   const [mode, setMode] = useState<AuthMode>(pageParams?.mode || 'login');
   const [selectedRole, setSelectedRole] = useState<'job-seeker' | 'recruiter'>(pageParams?.role || 'job-seeker');
-  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({ name: '', company: '', email: '', password: '' });
 
   useEffect(() => {
@@ -28,8 +28,7 @@ export function AuthPage() {
     e.preventDefault();
     if (mode === 'signup') {
       try {
-        setIsLoading(true);
-        await authApi.register({
+        await register({
           name: formData.name || formData.email.split('@')[0], 
           email: formData.email,
           password: formData.password,
@@ -40,22 +39,16 @@ export function AuthPage() {
         setFormData(prev => ({ ...prev, password: '' }));
       } catch (error: any) {
         toast.error(error.message || 'Failed to create account');
-      } finally {
-        setIsLoading(false);
       }
     } else {
       try {
-        setIsLoading(true);
-        const response = await authApi.login({
+        await login({
           email: formData.email,
           password: formData.password,
         });
         toast.success('Welcome back!');
-        login(response.access_token);
       } catch (error: any) {
         toast.error(error.message || 'Invalid email or password');
-      } finally {
-        setIsLoading(false);
       }
     }
   };
@@ -238,7 +231,7 @@ export function AuthPage() {
                 variant="outline"
                 size="sm"
                 className="border-border text-foreground hover:bg-muted hover:text-sienna hover:border-sienna transition-all cursor-pointer"
-                onClick={() => login('demo-token', 'job-seeker')}
+                onClick={() => navLogin('demo-token', 'job-seeker')}
               >
                 Job Seeker
               </Button>
@@ -246,7 +239,7 @@ export function AuthPage() {
                 variant="outline"
                 size="sm"
                 className="border-border text-foreground hover:bg-muted hover:text-sienna hover:border-sienna transition-all cursor-pointer"
-                onClick={() => login('demo-token', 'recruiter')}
+                onClick={() => navLogin('demo-token', 'recruiter')}
               >
                 Recruiter
               </Button>
@@ -254,7 +247,7 @@ export function AuthPage() {
                 variant="outline"
                 size="sm"
                 className="border-border text-foreground hover:bg-muted hover:text-sienna hover:border-sienna transition-all cursor-pointer"
-                onClick={() => login('demo-token', 'admin')}
+                onClick={() => navLogin('demo-token', 'admin')}
               >
                 Admin
               </Button>

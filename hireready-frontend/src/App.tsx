@@ -1,5 +1,3 @@
-
-
 import { NavigationProvider, useNavigation } from '@/lib/navigation-context';
 import { Navbar } from '@/components/navbar';
 import { Sidebar } from '@/components/sidebar';

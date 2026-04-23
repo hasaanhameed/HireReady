@@ -24,7 +24,6 @@ export interface Recruiter extends User {
   companyName: string;
   companyLogo?: string;
   workEmail: string;
-  approvalStatus: 'pending' | 'approved' | 'rejected';
 }
 
 export interface Admin extends User {

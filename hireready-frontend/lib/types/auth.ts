@@ -1,13 +1,17 @@
+import { UserRole } from './user';
+
 export interface UserSignupRequest {
   name: string;
   email: string;
   password: string;
-  role: string;
+  role: UserRole;
 }
 
 export interface UserResponse {
   id: string;
   email: string;
+  name: string;
+  role: UserRole;
 }
 
 export interface LoginRequest {
