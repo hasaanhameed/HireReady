@@ -41,8 +41,8 @@ export function MatchScoreRing({ score, size = 'md', showLabel = true }: MatchSc
           cy={config.width / 2}
           r={radius}
           fill="none"
-          stroke="currentColor"
-          className="text-sienna transition-all duration-500"
+          stroke="var(--sienna)"
+          className="transition-all duration-500"
           strokeWidth={config.stroke}
           strokeDasharray={circumference}
           strokeDashoffset={strokeDashoffset}

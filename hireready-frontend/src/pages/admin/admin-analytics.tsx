@@ -4,7 +4,7 @@ import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, Resp
 import { TrendingUp, Users, Briefcase, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-const COLORS = ['hsl(var(--sienna))', 'hsl(var(--slate))', 'hsl(var(--mist))'];
+const COLORS = ['var(--sienna)', 'var(--slate)', 'var(--mist)'];
 
 export function AdminAnalytics() {
   return (
@@ -68,19 +68,19 @@ export function AdminAnalytics() {
                     axisLine={false}
                     tickLine={false}
                     width={130}
-                    tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
+                    tick={{ fill: 'var(--muted-foreground)', fontSize: 12 }}
                   />
                   <Tooltip
-                    cursor={{ fill: 'hsl(var(--muted))', opacity: 0.2 }}
+                    cursor={{ fill: 'var(--muted)', opacity: 0.2 }}
                     contentStyle={{
-                      backgroundColor: 'hsl(var(--card))',
-                      border: '1px solid hsl(var(--border))',
+                      backgroundColor: 'var(--card)',
+                      border: '1px solid var(--border)',
                       borderRadius: '8px',
-                      color: 'hsl(var(--foreground))',
+                      color: 'var(--foreground)',
                     }}
-                    itemStyle={{ color: 'hsl(var(--sienna))' }}
+                    itemStyle={{ color: 'var(--sienna)' }}
                   />
-                  <Bar dataKey="searches" fill="hsl(var(--sienna))" radius={[0, 4, 4, 0]} barSize={20} />
+                  <Bar dataKey="searches" fill="var(--sienna)" radius={[0, 4, 4, 0]} barSize={20} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -113,12 +113,12 @@ export function AdminAnalytics() {
                   </Pie>
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: 'hsl(var(--card))',
-                      border: '1px solid hsl(var(--border))',
+                      backgroundColor: 'var(--card)',
+                      border: '1px solid var(--border)',
                       borderRadius: '8px',
-                      color: 'hsl(var(--foreground))',
+                      color: 'var(--foreground)',
                     }}
-                    itemStyle={{ color: 'hsl(var(--foreground))' }}
+                    itemStyle={{ color: 'var(--foreground)' }}
                   />
                   <Legend
                     formatter={(value) => (
@@ -147,29 +147,29 @@ export function AdminAnalytics() {
                   dataKey="month"
                   axisLine={false}
                   tickLine={false}
-                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
+                  tick={{ fill: 'var(--muted-foreground)', fontSize: 12 }}
                 />
                 <YAxis
                   axisLine={false}
                   tickLine={false}
-                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
+                  tick={{ fill: 'var(--muted-foreground)', fontSize: 12 }}
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: 'hsl(var(--card))',
-                    border: '1px solid hsl(var(--border))',
+                    backgroundColor: 'var(--card)',
+                    border: '1px solid var(--border)',
                     borderRadius: '8px',
-                    color: 'hsl(var(--foreground))',
+                    color: 'var(--foreground)',
                   }}
-                  itemStyle={{ color: 'hsl(var(--sienna))' }}
+                  itemStyle={{ color: 'var(--sienna)' }}
                   formatter={(value: number) => [`${value} users`, 'Total Users']}
                 />
                 <Line
                   type="monotone"
                   dataKey="users"
-                  stroke="hsl(var(--sienna))"
+                  stroke="var(--sienna)"
                   strokeWidth={3}
-                  dot={{ fill: 'hsl(var(--sienna))', r: 4, strokeWidth: 2, stroke: 'hsl(var(--card))' }}
+                  dot={{ fill: 'var(--sienna)', r: 4, strokeWidth: 2, stroke: 'var(--card)' }}
                   activeDot={{ r: 6, strokeWidth: 0 }}
                 />
               </LineChart>

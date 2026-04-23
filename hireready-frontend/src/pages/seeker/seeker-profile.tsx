@@ -97,30 +97,31 @@ export function SeekerProfile() {
                     dataKey="month"
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
+                    tick={{ fill: 'var(--muted-foreground)', fontSize: 12 }}
                   />
                   <YAxis
                     domain={[0, 100]}
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
+                    tick={{ fill: 'var(--muted-foreground)', fontSize: 12 }}
                   />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: 'hsl(var(--card))',
-                      border: '1px solid hsl(var(--border))',
+                      backgroundColor: 'var(--card)',
+                      border: '1px solid var(--border)',
                       borderRadius: '8px',
-                      color: 'hsl(var(--foreground))',
+                      color: 'var(--foreground)',
                     }}
-                    itemStyle={{ color: 'hsl(var(--foreground))' }}
+                    itemStyle={{ color: 'var(--foreground)' }}
                     formatter={(value: number) => [`${value}%`, 'Match Score']}
                   />
                   <Line
                     type="monotone"
                     dataKey="score"
-                    stroke="hsl(var(--sienna))"
-                    strokeWidth={2}
-                    dot={{ fill: 'hsl(var(--sienna))', strokeWidth: 2 }}
+                    stroke="var(--sienna)"
+                    strokeWidth={3}
+                    dot={{ fill: 'var(--sienna)', r: 4, strokeWidth: 2, stroke: 'var(--card)' }}
+                    activeDot={{ r: 6, strokeWidth: 0 }}
                   />
                 </LineChart>
               </ResponsiveContainer>
