@@ -53,13 +53,28 @@ export function LandingPage() {
   return (
     <div className="min-h-screen bg-background animate-liquid">
       {/* Hero Section */}
-      <section className="bg-navbar px-4 py-20 md:px-6 md:py-32">
-        <div className="mx-auto max-w-4xl text-center animate-liquid">
+      <section className="relative overflow-hidden bg-navbar px-4 py-20 md:px-6 md:py-32">
+        {/* Bridge Illustration */}
+        <div
+          className="absolute bottom-0 left-0 right-0 opacity-40 pointer-events-none select-none"
+          style={{
+            maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
+            WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'
+          }}
+        >
+          <img
+            src="/assets/images/hero_bridge.png"
+            alt="Bridge illustration"
+            className="w-full h-auto block"
+          />
+        </div>
+
+        <div className="relative mx-auto max-w-4xl text-center animate-liquid">
           <h1 className="text-balance text-4xl font-bold tracking-tight text-cloud md:text-5xl lg:text-6xl">
             Know exactly what&apos;s standing between you and your
             <div className="mt-2 h-[1.2em] overflow-hidden">
-              <span 
-                key={roles[roleIndex]} 
+              <span
+                key={roles[roleIndex]}
                 className="inline-block text-sienna animate-ticker"
               >
                 {roles[roleIndex]}
