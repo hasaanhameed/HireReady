@@ -31,7 +31,8 @@ export function MatchScoreRing({ score, size = 'md', showLabel = true }: MatchSc
           cy={config.width / 2}
           r={radius}
           fill="none"
-          stroke="#E5E5E5"
+          stroke="currentColor"
+          className="text-muted/20"
           strokeWidth={config.stroke}
         />
         {/* Progress circle */}
@@ -40,21 +41,21 @@ export function MatchScoreRing({ score, size = 'md', showLabel = true }: MatchSc
           cy={config.width / 2}
           r={radius}
           fill="none"
-          stroke="#2D2D2D"
+          stroke="currentColor"
+          className="text-sienna transition-all duration-500"
           strokeWidth={config.stroke}
           strokeDasharray={circumference}
           strokeDashoffset={strokeDashoffset}
           strokeLinecap="round"
-          className="transition-all duration-500"
         />
       </svg>
       {showLabel && (
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className={cn("font-bold text-[#1C1C1E]", config.fontSize)}>
+          <span className={cn("font-bold text-foreground", config.fontSize)}>
             {score}%
           </span>
           {size === 'lg' && (
-            <span className="text-xs text-[#6B7280]">Match</span>
+            <span className="text-xs text-muted-foreground">Match</span>
           )}
         </div>
       )}

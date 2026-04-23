@@ -8,49 +8,49 @@ export function AdminPostings() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#1C1C1E]">Job Postings</h1>
-        <p className="mt-1 text-[#6B7280]">
+        <h1 className="text-2xl font-bold text-foreground">Job Postings</h1>
+        <p className="mt-1 text-muted-foreground">
           View and manage all job postings on the platform
         </p>
       </div>
 
       {/* Stats */}
       <div className="grid gap-4 md:grid-cols-3">
-        <Card className="border-none shadow-sm">
+        <Card className="border-border/50 shadow-sm bg-card">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="rounded-lg bg-[#F3F4F6] p-2">
-                <Briefcase className="h-5 w-5 text-[#6B7280]" />
+              <div className="rounded-lg bg-muted/50 p-2">
+                <Briefcase className="h-5 w-5 text-sienna" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-[#1C1C1E]">156</p>
-                <p className="text-sm text-[#6B7280]">Total Postings</p>
+                <p className="text-2xl font-bold text-foreground font-heading">156</p>
+                <p className="text-sm text-muted-foreground">Total Postings</p>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-none shadow-sm">
+        <Card className="border-border/50 shadow-sm bg-card">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="rounded-lg bg-[#F3F4F6] p-2">
-                <Eye className="h-5 w-5 text-[#6B7280]" />
+              <div className="rounded-lg bg-muted/50 p-2">
+                <Eye className="h-5 w-5 text-sienna" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-[#1C1C1E]">142</p>
-                <p className="text-sm text-[#6B7280]">Active</p>
+                <p className="text-2xl font-bold text-foreground font-heading">142</p>
+                <p className="text-sm text-muted-foreground">Active</p>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-none shadow-sm">
+        <Card className="border-border/50 shadow-sm bg-card">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="rounded-lg bg-[#F3F4F6] p-2">
-                <Trash2 className="h-5 w-5 text-[#6B7280]" />
+              <div className="rounded-lg bg-muted/50 p-2">
+                <Trash2 className="h-5 w-5 text-sienna" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-[#1C1C1E]">14</p>
-                <p className="text-sm text-[#6B7280]">Expired</p>
+                <p className="text-2xl font-bold text-foreground font-heading">14</p>
+                <p className="text-sm text-muted-foreground">Expired</p>
               </div>
             </div>
           </CardContent>
@@ -58,9 +58,9 @@ export function AdminPostings() {
       </div>
 
       {/* Job Postings Table */}
-      <Card className="border-none shadow-sm">
+      <Card className="border-border/50 shadow-sm bg-card">
         <CardHeader className="pb-2">
-          <CardTitle className="text-lg font-semibold text-[#1C1C1E]">
+          <CardTitle className="text-lg font-semibold text-foreground font-heading">
             All Job Postings
           </CardTitle>
         </CardHeader>
@@ -68,37 +68,37 @@ export function AdminPostings() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-[#E5E5E5]">
-                  <th className="pb-3 text-left text-sm font-medium text-[#6B7280]">Position</th>
-                  <th className="pb-3 text-left text-sm font-medium text-[#6B7280]">Company</th>
-                  <th className="pb-3 text-left text-sm font-medium text-[#6B7280]">Posted</th>
-                  <th className="pb-3 text-left text-sm font-medium text-[#6B7280]">Applicants</th>
-                  <th className="pb-3 text-left text-sm font-medium text-[#6B7280]">Status</th>
-                  <th className="pb-3 text-left text-sm font-medium text-[#6B7280]">Actions</th>
+                <tr className="border-b border-border">
+                  <th className="pb-3 text-left text-sm font-medium text-muted-foreground">Position</th>
+                  <th className="pb-3 text-left text-sm font-medium text-muted-foreground">Company</th>
+                  <th className="pb-3 text-left text-sm font-medium text-muted-foreground">Posted</th>
+                  <th className="pb-3 text-left text-sm font-medium text-muted-foreground">Applicants</th>
+                  <th className="pb-3 text-left text-sm font-medium text-muted-foreground">Status</th>
+                  <th className="pb-3 text-left text-sm font-medium text-muted-foreground">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {recruiterJobPostings.map((job) => (
-                  <tr key={job.id} className="border-b border-[#E5E5E5] last:border-0">
+                  <tr key={job.id} className="border-b border-border last:border-0 hover:bg-muted/10 transition-colors">
                     <td className="py-4">
                       <div>
-                        <p className="font-medium text-[#1C1C1E]">{job.title}</p>
-                        <p className="text-sm text-[#6B7280] capitalize">
+                        <p className="font-medium text-foreground">{job.title}</p>
+                        <p className="text-sm text-muted-foreground capitalize">
                           {job.experienceLevel} • {job.jobType}
                         </p>
                       </div>
                     </td>
-                    <td className="py-4 text-sm text-[#1C1C1E]">{job.companyName}</td>
-                    <td className="py-4 text-sm text-[#6B7280]">{job.postedDate}</td>
+                    <td className="py-4 text-sm text-foreground">{job.companyName}</td>
+                    <td className="py-4 text-sm text-muted-foreground">{job.postedDate}</td>
                     <td className="py-4">
-                      <span className="inline-flex items-center rounded-full bg-[#F3F4F6] px-2 py-0.5 text-sm font-medium text-[#1C1C1E]">
+                      <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-sm font-medium text-foreground">
                         {job.applicantCount}
                       </span>
                     </td>
                     <td className="py-4">
                       <span className={cn(
                         "rounded-full px-2 py-0.5 text-xs font-medium",
-                        "bg-[#2D2D2D] text-white"
+                        "bg-sienna/20 text-sienna border border-sienna/30"
                       )}>
                         Active
                       </span>
@@ -108,14 +108,14 @@ export function AdminPostings() {
                         <Button
                           size="sm"
                           variant="outline"
-                          className="border-[#E5E5E5] text-[#6B7280]"
+                          className="border-border text-muted-foreground hover:text-foreground cursor-pointer"
                         >
                           <Eye className="h-3 w-3" />
                         </Button>
                         <Button
                           size="sm"
                           variant="outline"
-                          className="border-[#E5E5E5] text-[#6B7280]"
+                          className="border-border text-muted-foreground hover:text-red-500 hover:border-red-500 cursor-pointer"
                         >
                           <Trash2 className="h-3 w-3" />
                         </Button>

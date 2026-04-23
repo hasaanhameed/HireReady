@@ -5,57 +5,59 @@ import { User, MapPin, Target, FileText, Calendar } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 
 export function SeekerProfile() {
+  const initials = currentJobSeeker.name.split(' ').map(n => n[0]).join('');
+
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#1C1C1E]">Profile</h1>
-        <p className="mt-1 text-[#6B7280]">
+        <h1 className="text-2xl font-bold text-foreground">Profile</h1>
+        <p className="mt-1 text-muted-foreground">
           Manage your profile and track your progress
         </p>
       </div>
 
       {/* Profile Header */}
-      <Card className="border-none shadow-sm">
+      <Card className="border-border/50 shadow-sm bg-card">
         <CardContent className="p-6">
           <div className="flex flex-col items-center gap-6 md:flex-row md:items-start">
-            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[#F3F4F6]">
-              <User className="h-12 w-12 text-[#6B7280]" />
+            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-sienna/10 border-2 border-sienna/20">
+              <span className="text-3xl font-bold text-sienna">{initials}</span>
             </div>
             <div className="flex-1 text-center md:text-left">
-              <h2 className="text-2xl font-bold text-[#1C1C1E]">
+              <h2 className="text-2xl font-bold text-foreground font-heading">
                 {currentJobSeeker.name}
               </h2>
               <div className="mt-2 flex flex-col items-center gap-2 md:flex-row md:items-start">
-                <div className="flex items-center gap-1 text-[#6B7280]">
-                  <Target className="h-4 w-4" />
+                <div className="flex items-center gap-1 text-muted-foreground">
+                  <Target className="h-4 w-4 text-sienna" />
                   <span className="text-sm">{currentJobSeeker.targetRole}</span>
                 </div>
-                <span className="hidden text-[#D1D5DB] md:inline">|</span>
-                <div className="flex items-center gap-1 text-[#6B7280]">
-                  <MapPin className="h-4 w-4" />
+                <span className="hidden text-border md:inline">|</span>
+                <div className="flex items-center gap-1 text-muted-foreground">
+                  <MapPin className="h-4 w-4 text-sienna" />
                   <span className="text-sm">{currentJobSeeker.location}</span>
                 </div>
               </div>
               <div className="mt-4 flex items-center justify-center gap-4 md:justify-start">
                 <div className="text-center">
-                  <p className="text-2xl font-bold text-[#1C1C1E]">
+                  <p className="text-2xl font-bold text-sienna">
                     {currentJobSeeker.matchScore}%
                   </p>
-                  <p className="text-xs text-[#6B7280]">Match Score</p>
+                  <p className="text-xs text-muted-foreground">Match Score</p>
                 </div>
-                <div className="h-10 w-px bg-[#E5E5E5]" />
+                <div className="h-10 w-px bg-border" />
                 <div className="text-center">
-                  <p className="text-2xl font-bold text-[#1C1C1E]">
+                  <p className="text-2xl font-bold text-foreground">
                     {currentJobSeeker.currentSkills.length}
                   </p>
-                  <p className="text-xs text-[#6B7280]">Skills</p>
+                  <p className="text-xs text-muted-foreground">Skills</p>
                 </div>
-                <div className="h-10 w-px bg-[#E5E5E5]" />
+                <div className="h-10 w-px bg-border" />
                 <div className="text-center">
-                  <p className="text-2xl font-bold text-[#1C1C1E]">
+                  <p className="text-2xl font-bold text-foreground">
                     {currentJobSeeker.resumeHistory.length}
                   </p>
-                  <p className="text-xs text-[#6B7280]">Resumes</p>
+                  <p className="text-xs text-muted-foreground">Resumes</p>
                 </div>
               </div>
             </div>
@@ -65,9 +67,9 @@ export function SeekerProfile() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Current Skills */}
-        <Card className="border-none shadow-sm">
+        <Card className="border-border/50 shadow-sm bg-card">
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-semibold text-[#1C1C1E]">
+            <CardTitle className="text-lg font-semibold text-foreground font-heading">
               Current Skills
             </CardTitle>
           </CardHeader>
@@ -81,9 +83,9 @@ export function SeekerProfile() {
         </Card>
 
         {/* Match Score History */}
-        <Card className="border-none shadow-sm">
+        <Card className="border-border/50 shadow-sm bg-card">
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-semibold text-[#1C1C1E]">
+            <CardTitle className="text-lg font-semibold text-foreground font-heading">
               Match Score History
             </CardTitle>
           </CardHeader>
@@ -95,29 +97,30 @@ export function SeekerProfile() {
                     dataKey="month"
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fill: '#6B7280', fontSize: 12 }}
+                    tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
                   />
                   <YAxis
                     domain={[0, 100]}
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fill: '#6B7280', fontSize: 12 }}
+                    tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
                   />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: '#1C1C1E',
-                      border: 'none',
+                      backgroundColor: 'hsl(var(--card))',
+                      border: '1px solid hsl(var(--border))',
                       borderRadius: '8px',
-                      color: '#fff',
+                      color: 'hsl(var(--foreground))',
                     }}
+                    itemStyle={{ color: 'hsl(var(--foreground))' }}
                     formatter={(value: number) => [`${value}%`, 'Match Score']}
                   />
                   <Line
                     type="monotone"
                     dataKey="score"
-                    stroke="#6B7280"
+                    stroke="hsl(var(--sienna))"
                     strokeWidth={2}
-                    dot={{ fill: '#1C1C1E', strokeWidth: 2 }}
+                    dot={{ fill: 'hsl(var(--sienna))', strokeWidth: 2 }}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -127,9 +130,9 @@ export function SeekerProfile() {
       </div>
 
       {/* Resume Upload History */}
-      <Card className="border-none shadow-sm">
+      <Card className="border-border/50 shadow-sm bg-card">
         <CardHeader className="pb-2">
-          <CardTitle className="text-lg font-semibold text-[#1C1C1E]">
+          <CardTitle className="text-lg font-semibold text-foreground font-heading">
             Resume Upload History
           </CardTitle>
         </CardHeader>
@@ -138,20 +141,20 @@ export function SeekerProfile() {
             {currentJobSeeker.resumeHistory.map((resume, index) => (
               <div
                 key={index}
-                className="flex items-center gap-4 rounded-lg border border-[#E5E5E5] bg-white p-4"
+                className="flex items-center gap-4 rounded-lg border border-border bg-background p-4 hover:bg-muted/10 transition-colors"
               >
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#F3F4F6]">
-                  <FileText className="h-5 w-5 text-[#6B7280]" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted/50">
+                  <FileText className="h-5 w-5 text-sienna" />
                 </div>
                 <div className="flex-1">
-                  <p className="font-medium text-[#1C1C1E]">{resume.filename}</p>
-                  <div className="flex items-center gap-1 text-sm text-[#6B7280]">
+                  <p className="font-medium text-foreground">{resume.filename}</p>
+                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
                     <Calendar className="h-3 w-3" />
                     <span>{resume.date}</span>
                   </div>
                 </div>
                 {index === 0 && (
-                  <span className="rounded-full bg-[#2D2D2D] px-2 py-0.5 text-xs text-white">
+                  <span className="rounded-full bg-sienna/10 text-sienna border border-sienna/20 px-2 py-0.5 text-xs font-medium">
                     Current
                   </span>
                 )}

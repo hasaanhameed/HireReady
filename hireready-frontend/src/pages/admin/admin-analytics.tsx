@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { platformStats, analyticsData } from '@/lib/mock-data';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { TrendingUp, Users, Briefcase, Search } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const COLORS = ['hsl(var(--sienna))', 'hsl(var(--slate))', 'hsl(var(--mist))'];
 
@@ -17,51 +18,38 @@ export function AdminAnalytics() {
 
       {/* Stats Cards */}
       <div className="grid gap-4 md:grid-cols-4">
-        <Card className="border-border/50 shadow-sm bg-card">
-          <CardContent className="p-6">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Total Users</p>
-              <p className="mt-2 text-3xl font-bold text-foreground font-heading">
-                {platformStats.totalUsers}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-border/50 shadow-sm bg-card">
-          <CardContent className="p-6">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Active Seekers</p>
-              <p className="mt-2 text-3xl font-bold text-foreground font-heading">
-                {platformStats.activeJobSeekers}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-border/50 shadow-sm bg-card">
-          <CardContent className="p-6">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Job Postings</p>
-              <p className="mt-2 text-3xl font-bold text-foreground font-heading">
-                {platformStats.totalJobPostings}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-border/50 shadow-sm bg-card">
-          <CardContent className="p-6">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Monthly Growth</p>
-              <p className="mt-2 text-3xl font-bold text-sienna font-heading">+29%</p>
-            </div>
-          </CardContent>
-        </Card>
+        {[
+          { label: 'Total Users', value: platformStats.totalUsers, growth: '+12%' },
+          { label: 'Active Seekers', value: platformStats.activeJobSeekers, growth: '+8%' },
+          { label: 'Job Postings', value: platformStats.totalJobPostings, growth: '+24%' },
+          { label: 'Monthly Growth', value: '+29%', highlight: true },
+        ].map((stat, i) => (
+          <Card key={i} className="border-border/50 shadow-sm bg-card hover-scale cursor-pointer">
+            <CardContent className="p-6">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
+                <p className={cn(
+                  "mt-2 text-3xl font-bold font-heading",
+                  stat.highlight ? "text-sienna" : "text-foreground"
+                )}>
+                  {stat.value}
+                </p>
+                {stat.growth && (
+                  <p className="mt-1 text-xs text-sienna font-medium">
+                    {stat.growth} <span className="text-muted-foreground font-normal">from last month</span>
+                  </p>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Most Searched Roles */}
         <Card className="border-border/50 shadow-sm bg-card">
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-semibold text-foreground">
+            <CardTitle className="text-lg font-semibold text-foreground font-heading">
               Most Searched Job Roles
             </CardTitle>
           </CardHeader>
@@ -71,7 +59,7 @@ export function AdminAnalytics() {
                 <BarChart
                   data={analyticsData.mostSearchedRoles}
                   layout="vertical"
-                  margin={{ left: 0 }}
+                  margin={{ left: 0, right: 30 }}
                 >
                   <XAxis type="number" hide />
                   <YAxis
@@ -83,15 +71,16 @@ export function AdminAnalytics() {
                     tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
                   />
                   <Tooltip
+                    cursor={{ fill: 'hsl(var(--muted))', opacity: 0.2 }}
                     contentStyle={{
                       backgroundColor: 'hsl(var(--card))',
                       border: '1px solid hsl(var(--border))',
                       borderRadius: '8px',
                       color: 'hsl(var(--foreground))',
                     }}
-                    itemStyle={{ color: 'hsl(var(--foreground))' }}
+                    itemStyle={{ color: 'hsl(var(--sienna))' }}
                   />
-                  <Bar dataKey="searches" fill="hsl(var(--sienna))" radius={[0, 4, 4, 0]} />
+                  <Bar dataKey="searches" fill="hsl(var(--sienna))" radius={[0, 4, 4, 0]} barSize={20} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -101,7 +90,7 @@ export function AdminAnalytics() {
         {/* User Distribution */}
         <Card className="border-border/50 shadow-sm bg-card">
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-semibold text-foreground">
+            <CardTitle className="text-lg font-semibold text-foreground font-heading">
               User Role Distribution
             </CardTitle>
           </CardHeader>
@@ -133,7 +122,7 @@ export function AdminAnalytics() {
                   />
                   <Legend
                     formatter={(value) => (
-                      <span className="text-xs text-muted-foreground">{value}</span>
+                      <span className="text-xs font-medium text-muted-foreground">{value}</span>
                     )}
                   />
                 </PieChart>
@@ -146,14 +135,14 @@ export function AdminAnalytics() {
       {/* Platform Growth */}
       <Card className="border-border/50 shadow-sm bg-card">
         <CardHeader className="pb-2">
-          <CardTitle className="text-lg font-semibold text-foreground">
+          <CardTitle className="text-lg font-semibold text-foreground font-heading">
             Platform Growth Over Time
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={analyticsData.platformGrowth}>
+              <LineChart data={analyticsData.platformGrowth} margin={{ top: 20, right: 30, left: 20, bottom: 0 }}>
                 <XAxis
                   dataKey="month"
                   axisLine={false}
@@ -172,15 +161,16 @@ export function AdminAnalytics() {
                     borderRadius: '8px',
                     color: 'hsl(var(--foreground))',
                   }}
-                  itemStyle={{ color: 'hsl(var(--foreground))' }}
+                  itemStyle={{ color: 'hsl(var(--sienna))' }}
                   formatter={(value: number) => [`${value} users`, 'Total Users']}
                 />
                 <Line
                   type="monotone"
                   dataKey="users"
                   stroke="hsl(var(--sienna))"
-                  strokeWidth={2}
-                  dot={{ fill: 'hsl(var(--sienna))', strokeWidth: 2 }}
+                  strokeWidth={3}
+                  dot={{ fill: 'hsl(var(--sienna))', r: 4, strokeWidth: 2, stroke: 'hsl(var(--card))' }}
+                  activeDot={{ r: 6, strokeWidth: 0 }}
                 />
               </LineChart>
             </ResponsiveContainer>

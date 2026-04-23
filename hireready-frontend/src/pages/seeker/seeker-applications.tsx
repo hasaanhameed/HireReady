@@ -19,42 +19,42 @@ export function SeekerApplications() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#1C1C1E]">Applied Jobs</h1>
-        <p className="mt-1 text-[#6B7280]">
+        <h1 className="text-2xl font-bold text-foreground">Applied Jobs</h1>
+        <p className="mt-1 text-muted-foreground">
           Track the status of your job applications
         </p>
       </div>
 
       {/* Stats */}
       <div className="grid gap-4 md:grid-cols-4">
-        <Card className="border-none shadow-sm">
+        <Card className="border-border/50 shadow-sm bg-card">
           <CardContent className="p-4">
-            <p className="text-sm text-[#6B7280]">Total Applications</p>
-            <p className="mt-1 text-2xl font-bold text-[#1C1C1E]">
+            <p className="text-sm text-muted-foreground">Total Applications</p>
+            <p className="mt-1 text-2xl font-bold text-foreground">
               {jobSeekerApplications.length}
             </p>
           </CardContent>
         </Card>
-        <Card className="border-none shadow-sm">
+        <Card className="border-border/50 shadow-sm bg-card">
           <CardContent className="p-4">
-            <p className="text-sm text-[#6B7280]">Pending</p>
-            <p className="mt-1 text-2xl font-bold text-[#1C1C1E]">
+            <p className="text-sm text-muted-foreground">Pending</p>
+            <p className="mt-1 text-2xl font-bold text-foreground">
               {jobSeekerApplications.filter((a) => a.status === 'pending').length}
             </p>
           </CardContent>
         </Card>
-        <Card className="border-none shadow-sm">
+        <Card className="border-border/50 shadow-sm bg-card">
           <CardContent className="p-4">
-            <p className="text-sm text-[#6B7280]">Shortlisted</p>
-            <p className="mt-1 text-2xl font-bold text-[#1C1C1E]">
+            <p className="text-sm text-muted-foreground">Shortlisted</p>
+            <p className="mt-1 text-2xl font-bold text-foreground">
               {jobSeekerApplications.filter((a) => a.status === 'shortlisted').length}
             </p>
           </CardContent>
         </Card>
-        <Card className="border-none shadow-sm">
+        <Card className="border-border/50 shadow-sm bg-card">
           <CardContent className="p-4">
-            <p className="text-sm text-[#6B7280]">Avg. Match Score</p>
-            <p className="mt-1 text-2xl font-bold text-[#1C1C1E]">
+            <p className="text-sm text-muted-foreground">Avg. Match Score</p>
+            <p className="mt-1 text-2xl font-bold text-foreground">
               {Math.round(
                 jobSeekerApplications.reduce((acc, a) => acc + a.matchScore, 0) /
                   jobSeekerApplications.length
@@ -66,9 +66,9 @@ export function SeekerApplications() {
       </div>
 
       {/* Applications List */}
-      <Card className="border-none shadow-sm">
+      <Card className="border-border/50 shadow-sm bg-card">
         <CardHeader className="pb-2">
-          <CardTitle className="text-lg font-semibold text-[#1C1C1E]">
+          <CardTitle className="text-lg font-semibold text-foreground font-heading">
             Your Applications
           </CardTitle>
         </CardHeader>
@@ -77,16 +77,16 @@ export function SeekerApplications() {
             {jobSeekerApplications.map((application) => (
               <div
                 key={application.id}
-                className="rounded-lg border border-[#E5E5E5] bg-white p-4"
+                className="rounded-lg border border-border bg-background p-4 hover:bg-muted/10 transition-colors"
               >
                 <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                   <div className="flex-1">
                     <div className="flex items-start justify-between">
                       <div>
-                        <h3 className="font-semibold text-[#1C1C1E]">
+                        <h3 className="font-semibold text-foreground font-heading">
                           {jobTitles[application.jobId]}
                         </h3>
-                        <p className="text-sm text-[#6B7280]">
+                        <p className="text-sm text-muted-foreground">
                           {companies[application.jobId]}
                         </p>
                       </div>
@@ -94,12 +94,12 @@ export function SeekerApplications() {
                         className={cn(
                           "rounded-full px-3 py-1 text-xs font-medium",
                           application.status === 'shortlisted'
-                            ? "bg-[#2D2D2D] text-white"
+                            ? "bg-sienna text-warm-white"
                             : application.status === 'reviewed'
-                              ? "bg-[#9CA3AF] text-white"
+                              ? "bg-slate text-warm-white"
                               : application.status === 'rejected'
-                                ? "bg-[#E5E5E5] text-[#6B7280]"
-                                : "bg-[#F3F4F6] text-[#6B7280]"
+                                ? "bg-muted text-muted-foreground"
+                                : "bg-muted/50 text-muted-foreground"
                         )}
                       >
                         {application.status}
@@ -108,7 +108,7 @@ export function SeekerApplications() {
 
                     <div className="mt-4 grid gap-4 md:grid-cols-2">
                       <div>
-                        <p className="mb-2 text-xs font-medium text-[#6B7280]">
+                        <p className="mb-2 text-xs font-medium text-muted-foreground">
                           Skills Matched
                         </p>
                         <div className="flex flex-wrap gap-1">
@@ -123,7 +123,7 @@ export function SeekerApplications() {
                         </div>
                       </div>
                       <div>
-                        <p className="mb-2 text-xs font-medium text-[#6B7280]">
+                        <p className="mb-2 text-xs font-medium text-muted-foreground">
                           Missing Skills
                         </p>
                         <div className="flex flex-wrap gap-1">
@@ -142,21 +142,21 @@ export function SeekerApplications() {
 
                   <div className="flex items-center gap-4 md:flex-col md:items-end">
                     <div className="text-center md:text-right">
-                      <p className="text-xs text-[#6B7280]">Match Score</p>
+                      <p className="text-xs text-muted-foreground">Match Score</p>
                       <p
                         className={cn(
                           "text-2xl font-bold",
                           application.matchScore >= 70
-                            ? "text-[#1C1C1E]"
+                            ? "text-sienna"
                             : application.matchScore >= 50
-                              ? "text-[#6B7280]"
-                              : "text-[#9CA3AF]"
+                              ? "text-foreground"
+                              : "text-muted-foreground"
                         )}
                       >
                         {application.matchScore}%
                       </p>
                     </div>
-                    <p className="text-xs text-[#9CA3AF]">
+                    <p className="text-xs text-muted-foreground">
                       Applied {application.applyDate}
                     </p>
                   </div>

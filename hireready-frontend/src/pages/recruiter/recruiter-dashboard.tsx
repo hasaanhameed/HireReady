@@ -65,7 +65,6 @@ export function RecruiterDashboard() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-               <thead>
                 <tr className="border-b border-border">
                   <th className="pb-3 text-left text-sm font-medium text-muted-foreground">Position</th>
                   <th className="pb-3 text-left text-sm font-medium text-muted-foreground">Posted</th>
@@ -93,8 +92,8 @@ export function RecruiterDashboard() {
                       <span className={cn(
                         "inline-flex rounded-full px-2 py-0.5 text-xs font-medium",
                         job.avgMatchScore >= 70 ? "bg-sienna text-warm-white" :
-                        job.avgMatchScore >= 50 ? "bg-slate text-warm-white" :
-                        "bg-muted text-muted-foreground"
+                          job.avgMatchScore >= 50 ? "bg-slate text-warm-white" :
+                            "bg-muted text-muted-foreground"
                       )}>
                         {job.avgMatchScore}%
                       </span>
@@ -158,8 +157,8 @@ export function RecruiterDashboard() {
                   <span className={cn(
                     "rounded-full px-3 py-1 text-sm font-medium",
                     applicant.matchScore >= 70 ? "bg-sienna text-warm-white" :
-                    applicant.matchScore >= 50 ? "bg-slate text-warm-white" :
-                    "bg-muted text-muted-foreground"
+                      applicant.matchScore >= 50 ? "bg-slate text-warm-white" :
+                        "bg-muted text-muted-foreground"
                   )}>
                     {applicant.matchScore}% match
                   </span>

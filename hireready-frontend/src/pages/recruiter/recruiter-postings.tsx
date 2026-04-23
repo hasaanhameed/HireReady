@@ -13,13 +13,13 @@ export function RecruiterPostings() {
     <div className="space-y-6">
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
-          <h1 className="text-2xl font-bold text-[#1C1C1E]">My Job Postings</h1>
-          <p className="mt-1 text-[#6B7280]">
+          <h1 className="text-2xl font-bold text-foreground">My Job Postings</h1>
+          <p className="mt-1 text-muted-foreground">
             Manage all your active job postings
           </p>
         </div>
         <Button
-          className="bg-[#2D2D2D] text-white hover:bg-[#1C1C1E]"
+          className="bg-sienna text-warm-white hover:bg-sienna/90 cursor-pointer"
           onClick={() => navigate('recruiter-post-job')}
         >
           <Plus className="mr-2 h-4 w-4" />
@@ -30,19 +30,19 @@ export function RecruiterPostings() {
       {/* Job Postings Grid */}
       <div className="grid gap-6 lg:grid-cols-2">
         {recruiterJobPostings.map((job) => (
-          <Card key={job.id} className="border-none shadow-sm">
+          <Card key={job.id} className="border-border/50 shadow-sm bg-card">
             <CardHeader className="pb-2">
               <div className="flex items-start justify-between">
                 <div>
-                  <CardTitle className="text-lg font-semibold text-[#1C1C1E]">
+                  <CardTitle className="text-lg font-semibold text-foreground font-heading">
                     {job.title}
                   </CardTitle>
-                  <p className="mt-1 text-sm text-[#6B7280] capitalize">
+                  <p className="mt-1 text-sm text-muted-foreground capitalize">
                     {job.experienceLevel} • {job.jobType}
                   </p>
                 </div>
-                <Button variant="ghost" size="icon" className="shrink-0">
-                  <MoreHorizontal className="h-4 w-4 text-[#6B7280]" />
+                <Button variant="ghost" size="icon" className="shrink-0 text-muted-foreground hover:text-foreground cursor-pointer">
+                  <MoreHorizontal className="h-4 w-4" />
                 </Button>
               </div>
             </CardHeader>
@@ -50,22 +50,22 @@ export function RecruiterPostings() {
               {/* Stats Row */}
               <div className="flex gap-6">
                 <div className="flex items-center gap-2">
-                  <Users className="h-4 w-4 text-[#6B7280]" />
-                  <span className="text-sm text-[#1C1C1E]">
-                    <strong>{job.applicantCount}</strong> applicants
+                  <Users className="h-4 w-4 text-sienna" />
+                  <span className="text-sm text-foreground">
+                    <strong className="text-foreground">{job.applicantCount}</strong> <span className="text-muted-foreground">applicants</span>
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <TrendingUp className="h-4 w-4 text-[#6B7280]" />
-                  <span className="text-sm text-[#1C1C1E]">
-                    <strong>{job.avgMatchScore}%</strong> avg match
+                  <TrendingUp className="h-4 w-4 text-sienna" />
+                  <span className="text-sm text-foreground">
+                    <strong className="text-foreground">{job.avgMatchScore}%</strong> <span className="text-muted-foreground">avg match</span>
                   </span>
                 </div>
               </div>
 
               {/* Required Skills */}
               <div>
-                <p className="mb-2 text-xs font-medium text-[#6B7280]">
+                <p className="mb-2 text-xs font-medium text-muted-foreground">
                   Required Skills
                 </p>
                 <div className="flex flex-wrap gap-1">
@@ -73,7 +73,7 @@ export function RecruiterPostings() {
                     <SkillBadge key={skill} skill={skill} variant="outlined" size="sm" />
                   ))}
                   {job.requiredSkills.length > 4 && (
-                    <span className="inline-flex items-center rounded-full border border-[#E5E5E5] px-2 py-0.5 text-xs text-[#6B7280]">
+                    <span className="inline-flex items-center rounded-full border border-border px-2 py-0.5 text-xs text-muted-foreground bg-muted/30">
                       +{job.requiredSkills.length - 4} more
                     </span>
                   )}
@@ -81,15 +81,15 @@ export function RecruiterPostings() {
               </div>
 
               {/* Footer */}
-              <div className="flex items-center justify-between border-t border-[#E5E5E5] pt-4">
-                <div className="flex items-center gap-1 text-sm text-[#6B7280]">
-                  <Calendar className="h-4 w-4" />
+              <div className="flex items-center justify-between border-t border-border pt-4">
+                <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                  <Calendar className="h-4 w-4 text-sienna" />
                   <span>Posted {job.postedDate}</span>
                 </div>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="border-[#E5E5E5] text-[#1C1C1E]"
+                  className="border-border text-foreground hover:bg-muted cursor-pointer"
                   onClick={() => navigate('recruiter-applicants')}
                 >
                   View Applicants

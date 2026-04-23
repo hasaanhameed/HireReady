@@ -6,40 +6,40 @@ export function RecruiterProfile() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#1C1C1E]">Profile</h1>
-        <p className="mt-1 text-[#6B7280]">
+        <h1 className="text-2xl font-bold text-foreground">Profile</h1>
+        <p className="mt-1 text-muted-foreground">
           Manage your recruiter profile and company information
         </p>
       </div>
 
       {/* Company Profile */}
-      <Card className="border-none shadow-sm">
+      <Card className="border-border/50 shadow-sm bg-card">
         <CardContent className="p-6">
           <div className="flex flex-col items-center gap-6 md:flex-row md:items-start">
             {/* Company Logo Placeholder */}
-            <div className="flex h-24 w-24 items-center justify-center rounded-lg bg-[#F3F4F6]">
-              <Building2 className="h-12 w-12 text-[#6B7280]" />
+            <div className="flex h-24 w-24 items-center justify-center rounded-lg bg-muted/50 border border-border">
+              <Building2 className="h-12 w-12 text-sienna" />
             </div>
             <div className="flex-1 text-center md:text-left">
-              <h2 className="text-2xl font-bold text-[#1C1C1E]">
+              <h2 className="text-2xl font-bold text-foreground font-heading">
                 {currentRecruiter.companyName}
               </h2>
               <div className="mt-3 space-y-2">
-                <div className="flex items-center justify-center gap-2 text-[#6B7280] md:justify-start">
-                  <span className="text-sm font-medium">Recruiter:</span>
+                <div className="flex items-center justify-center gap-2 text-muted-foreground md:justify-start">
+                  <span className="text-sm font-medium text-foreground">Recruiter:</span>
                   <span className="text-sm">{currentRecruiter.name}</span>
                 </div>
-                <div className="flex items-center justify-center gap-2 text-[#6B7280] md:justify-start">
-                  <Mail className="h-4 w-4" />
+                <div className="flex items-center justify-center gap-2 text-muted-foreground md:justify-start">
+                  <Mail className="h-4 w-4 text-sienna" />
                   <span className="text-sm">{currentRecruiter.workEmail}</span>
                 </div>
-                <div className="flex items-center justify-center gap-2 text-[#6B7280] md:justify-start">
-                  <Calendar className="h-4 w-4" />
+                <div className="flex items-center justify-center gap-2 text-muted-foreground md:justify-start">
+                  <Calendar className="h-4 w-4 text-sienna" />
                   <span className="text-sm">Member since {currentRecruiter.joinDate}</span>
                 </div>
               </div>
             </div>
-            <div className="rounded-full bg-[#2D2D2D] px-4 py-2 text-sm font-medium text-white">
+            <div className="rounded-full bg-sienna/20 text-sienna border border-sienna/30 px-4 py-2 text-sm font-medium">
               {currentRecruiter.approvalStatus}
             </div>
           </div>
@@ -48,47 +48,47 @@ export function RecruiterProfile() {
 
       {/* Stats */}
       <div className="grid gap-4 md:grid-cols-3">
-        <Card className="border-none shadow-sm">
+        <Card className="border-border/50 shadow-sm bg-card">
           <CardContent className="p-6">
             <div className="flex items-center gap-4">
-              <div className="rounded-lg bg-[#F3F4F6] p-3">
-                <Briefcase className="h-6 w-6 text-[#6B7280]" />
+              <div className="rounded-lg bg-muted/50 p-3">
+                <Briefcase className="h-6 w-6 text-sienna" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-[#1C1C1E]">
+                <p className="text-2xl font-bold text-foreground">
                   {recruiterStats.totalPostings}
                 </p>
-                <p className="text-sm text-[#6B7280]">Active Job Postings</p>
+                <p className="text-sm text-muted-foreground">Active Job Postings</p>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-none shadow-sm">
+        <Card className="border-border/50 shadow-sm bg-card">
           <CardContent className="p-6">
             <div className="flex items-center gap-4">
-              <div className="rounded-lg bg-[#F3F4F6] p-3">
-                <Users className="h-6 w-6 text-[#6B7280]" />
+              <div className="rounded-lg bg-muted/50 p-3">
+                <Users className="h-6 w-6 text-sienna" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-[#1C1C1E]">
+                <p className="text-2xl font-bold text-foreground">
                   {recruiterStats.totalApplicants}
                 </p>
-                <p className="text-sm text-[#6B7280]">Total Applicants</p>
+                <p className="text-sm text-muted-foreground">Total Applicants</p>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-none shadow-sm">
+        <Card className="border-border/50 shadow-sm bg-card">
           <CardContent className="p-6">
             <div className="flex items-center gap-4">
-              <div className="rounded-lg bg-[#F3F4F6] p-3">
-                <TrendingUp className="h-6 w-6 text-[#6B7280]" />
+              <div className="rounded-lg bg-muted/50 p-3">
+                <TrendingUp className="h-6 w-6 text-sienna" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-[#1C1C1E]">
+                <p className="text-2xl font-bold text-foreground">
                   {recruiterStats.avgMatchScore}%
                 </p>
-                <p className="text-sm text-[#6B7280]">Avg Match Score</p>
+                <p className="text-sm text-muted-foreground">Avg Match Score</p>
               </div>
             </div>
           </CardContent>
@@ -96,9 +96,9 @@ export function RecruiterProfile() {
       </div>
 
       {/* Active Job Postings Summary */}
-      <Card className="border-none shadow-sm">
+      <Card className="border-border/50 shadow-sm bg-card">
         <CardHeader className="pb-2">
-          <CardTitle className="text-lg font-semibold text-[#1C1C1E]">
+          <CardTitle className="text-lg font-semibold text-foreground font-heading">
             Active Job Postings
           </CardTitle>
         </CardHeader>
@@ -107,20 +107,20 @@ export function RecruiterProfile() {
             {recruiterJobPostings.map((job) => (
               <div
                 key={job.id}
-                className="flex items-center justify-between rounded-lg border border-[#E5E5E5] bg-white p-4"
+                className="flex items-center justify-between rounded-lg border border-border bg-background p-4 hover:bg-muted/10 transition-colors"
               >
                 <div>
-                  <p className="font-medium text-[#1C1C1E]">{job.title}</p>
-                  <p className="text-sm text-[#6B7280] capitalize">
+                  <p className="font-medium text-foreground">{job.title}</p>
+                  <p className="text-sm text-muted-foreground capitalize">
                     {job.experienceLevel} • {job.jobType}
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="font-medium text-[#1C1C1E]">
-                    {job.applicantCount} applicants
+                  <p className="font-medium text-foreground">
+                    <span className="text-sienna">{job.applicantCount}</span> <span className="text-muted-foreground">applicants</span>
                   </p>
-                  <p className="text-sm text-[#6B7280]">
-                    {job.avgMatchScore}% avg match
+                  <p className="text-sm text-muted-foreground">
+                    <span className="text-sienna">{job.avgMatchScore}%</span> <span className="text-muted-foreground">avg match</span>
                   </p>
                 </div>
               </div>

@@ -20,26 +20,26 @@ export function RecruiterApplicants() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#1C1C1E]">Applicants</h1>
-        <p className="mt-1 text-[#6B7280]">
+        <h1 className="text-2xl font-bold text-foreground">Applicants</h1>
+        <p className="mt-1 text-muted-foreground">
           Review and manage candidates for your job postings
         </p>
       </div>
 
       {/* Filters */}
-      <Card className="border-none shadow-sm">
+      <Card className="border-border/50 shadow-sm bg-card">
         <CardContent className="p-4">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end">
             {/* Job Selector */}
             <div className="flex-1 space-y-2">
-              <label className="text-sm font-medium text-[#1C1C1E]">Job Posting</label>
+              <label className="text-sm font-medium text-foreground">Job Posting</label>
               <Select value={selectedJob} onValueChange={setSelectedJob}>
-                <SelectTrigger className="border-[#E5E5E5] bg-white">
+                <SelectTrigger className="border-border bg-background cursor-pointer">
                   <SelectValue placeholder="Select a job posting" />
                 </SelectTrigger>
                 <SelectContent>
                   {recruiterJobPostings.map((job) => (
-                    <SelectItem key={job.id} value={job.id}>
+                    <SelectItem key={job.id} value={job.id} className="cursor-pointer">
                       {job.title} ({job.applicantCount} applicants)
                     </SelectItem>
                   ))}
@@ -50,27 +50,27 @@ export function RecruiterApplicants() {
             {/* Min Match Score Filter */}
             <div className="w-full space-y-2 lg:w-64">
               <div className="flex items-center justify-between">
-                <label className="text-sm font-medium text-[#1C1C1E]">
+                <label className="text-sm font-medium text-foreground">
                   Min Match Score
                 </label>
-                <span className="text-sm text-[#6B7280]">{minMatchScore[0]}%</span>
+                <span className="text-sm text-sienna font-bold">{minMatchScore[0]}%</span>
               </div>
               <Slider
                 value={minMatchScore}
                 onValueChange={setMinMatchScore}
                 max={100}
                 step={5}
-                className="py-2"
+                className="py-2 cursor-pointer"
               />
             </div>
 
             {/* Sort Button */}
             <Button
               variant="outline"
-              className="shrink-0 border-[#E5E5E5]"
+              className="shrink-0 border-border text-foreground hover:bg-muted cursor-pointer"
               onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
             >
-              <ArrowUpDown className="mr-2 h-4 w-4" />
+              <ArrowUpDown className="mr-2 h-4 w-4 text-sienna" />
               Sort: {sortOrder === 'desc' ? 'Highest' : 'Lowest'}
             </Button>
           </div>
@@ -78,42 +78,42 @@ export function RecruiterApplicants() {
       </Card>
 
       {/* Applicants Table */}
-      <Card className="border-none shadow-sm">
+      <Card className="border-border/50 shadow-sm bg-card">
         <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#1C1C1E]">
-            <Filter className="h-5 w-5 text-[#6B7280]" />
+          <CardTitle className="flex items-center gap-2 text-lg font-semibold text-foreground font-heading">
+            <Filter className="h-5 w-5 text-sienna" />
             {filteredApplicants.length} Applicants
           </CardTitle>
         </CardHeader>
         <CardContent>
           {filteredApplicants.length === 0 ? (
             <div className="py-12 text-center">
-              <p className="text-[#6B7280]">No applicants match your criteria</p>
+              <p className="text-muted-foreground">No applicants match your criteria</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-[#E5E5E5]">
-                    <th className="pb-3 text-left text-sm font-medium text-[#6B7280]">Name</th>
-                    <th className="pb-3 text-left text-sm font-medium text-[#6B7280]">Match Score</th>
-                    <th className="pb-3 text-left text-sm font-medium text-[#6B7280]">Skills Match</th>
-                    <th className="pb-3 text-left text-sm font-medium text-[#6B7280]">Missing Skills</th>
-                    <th className="pb-3 text-left text-sm font-medium text-[#6B7280]">Applied</th>
-                    <th className="pb-3 text-left text-sm font-medium text-[#6B7280]">Status</th>
+                  <tr className="border-b border-border">
+                    <th className="pb-3 text-left text-sm font-medium text-muted-foreground">Name</th>
+                    <th className="pb-3 text-left text-sm font-medium text-muted-foreground">Match Score</th>
+                    <th className="pb-3 text-left text-sm font-medium text-muted-foreground">Skills Match</th>
+                    <th className="pb-3 text-left text-sm font-medium text-muted-foreground">Missing Skills</th>
+                    <th className="pb-3 text-left text-sm font-medium text-muted-foreground">Applied</th>
+                    <th className="pb-3 text-left text-sm font-medium text-muted-foreground">Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredApplicants.map((applicant) => (
-                    <tr key={applicant.id} className="border-b border-[#E5E5E5] last:border-0">
+                    <tr key={applicant.id} className="border-b border-border last:border-0 hover:bg-muted/10 transition-colors">
                       <td className="py-4">
                         <div className="flex items-center gap-3">
-                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F3F4F6]">
-                            <span className="text-xs font-medium text-[#6B7280]">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-sienna/10 border border-sienna/20">
+                            <span className="text-xs font-bold text-sienna">
                               {applicant.seekerName.split(' ').map(n => n[0]).join('')}
                             </span>
                           </div>
-                          <span className="font-medium text-[#1C1C1E]">
+                          <span className="font-medium text-foreground">
                             {applicant.seekerName}
                           </span>
                         </div>
@@ -121,9 +121,9 @@ export function RecruiterApplicants() {
                       <td className="py-4">
                         <span className={cn(
                           "inline-flex rounded-full px-2 py-0.5 text-xs font-medium",
-                          applicant.matchScore >= 70 ? "bg-[#2D2D2D] text-white" :
-                          applicant.matchScore >= 50 ? "bg-[#9CA3AF] text-white" :
-                          "bg-[#E5E5E5] text-[#6B7280]"
+                          applicant.matchScore >= 70 ? "bg-sienna text-warm-white" :
+                          applicant.matchScore >= 50 ? "bg-slate text-warm-white" :
+                          "bg-muted text-muted-foreground"
                         )}>
                           {applicant.matchScore}%
                         </span>
@@ -134,7 +134,7 @@ export function RecruiterApplicants() {
                             <SkillBadge key={skill} skill={skill} variant="filled" size="sm" />
                           ))}
                           {applicant.skillsMatch.length > 3 && (
-                            <span className="text-xs text-[#6B7280]">
+                            <span className="text-xs text-muted-foreground">
                               +{applicant.skillsMatch.length - 3}
                             </span>
                           )}
@@ -146,20 +146,20 @@ export function RecruiterApplicants() {
                             <SkillBadge key={skill} skill={skill} variant="outlined" size="sm" />
                           ))}
                           {applicant.missingSkills.length > 2 && (
-                            <span className="text-xs text-[#6B7280]">
+                            <span className="text-xs text-muted-foreground">
                               +{applicant.missingSkills.length - 2}
                             </span>
                           )}
                         </div>
                       </td>
-                      <td className="py-4 text-sm text-[#6B7280]">{applicant.applyDate}</td>
+                      <td className="py-4 text-sm text-muted-foreground">{applicant.applyDate}</td>
                       <td className="py-4">
                         <span className={cn(
                           "rounded-full px-2 py-0.5 text-xs font-medium capitalize",
-                          applicant.status === 'shortlisted' ? "bg-[#2D2D2D] text-white" :
-                          applicant.status === 'reviewed' ? "bg-[#9CA3AF] text-white" :
-                          applicant.status === 'rejected' ? "bg-[#E5E5E5] text-[#6B7280]" :
-                          "bg-[#F3F4F6] text-[#6B7280]"
+                          applicant.status === 'shortlisted' ? "bg-sienna/20 text-sienna border border-sienna/30" :
+                          applicant.status === 'reviewed' ? "bg-slate/20 text-slate border border-slate/30" :
+                          applicant.status === 'rejected' ? "bg-muted text-muted-foreground" :
+                          "bg-muted/50 text-muted-foreground"
                         )}>
                           {applicant.status}
                         </span>
