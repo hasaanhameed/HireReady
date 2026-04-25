@@ -5,7 +5,7 @@ from app.database.connection import get_db
 from app.schema.user import UserCreate, UserResponse, LoginRequest
 from app.schema.token import TokenResponse
 from app.services.hash import get_password_hash, verify_password
-from app.services.auth import create_access_token
+from app.services.auth import create_access_token, get_current_user
 
 router = APIRouter(
     prefix="/users",
@@ -40,7 +40,12 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     new_user = result.fetchone()
     
     # Return matched UserResponse
-    return UserResponse(id=str(new_user.id), email=new_user.email)
+    return UserResponse(
+        id=str(new_user.id), 
+        email=new_user.email,
+        name=user.name,
+        role=user.role
+    )
 
 @router.post("/login", response_model=TokenResponse)
 def login(login_data: LoginRequest, db: Session = Depends(get_db)):
@@ -63,3 +68,12 @@ def login(login_data: LoginRequest, db: Session = Depends(get_db)):
     )
     
     return TokenResponse(access_token=access_token, token_type="bearer")
+    
+@router.get("/me", response_model=UserResponse)
+def read_users_me(current_user = Depends(get_current_user)):
+    return UserResponse(
+        id=str(current_user.id),
+        email=current_user.email,
+        name=current_user.name,
+        role=current_user.role
+    )

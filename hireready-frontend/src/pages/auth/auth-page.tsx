@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { User, Building2, Mail, Lock, ArrowLeft } from 'lucide-react';
+import { User, Building2, Mail, Lock, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { LoginRequest, UserSignupRequest } from '@/lib/types/auth';
 
@@ -18,6 +18,7 @@ export function AuthPage() {
   const [mode, setMode] = useState<AuthMode>(pageParams?.mode || 'login');
   const [selectedRole, setSelectedRole] = useState<'job-seeker' | 'recruiter'>(pageParams?.role || 'job-seeker');
   const [formData, setFormData] = useState({ name: '', company: '', email: '', password: '' });
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (pageParams?.mode) setMode(pageParams.mode);
@@ -48,7 +49,10 @@ export function AuthPage() {
         });
         toast.success('Welcome back!');
       } catch (error: any) {
-        toast.error(error.message || 'Invalid email or password');
+        const errorMessage = error.response?.status === 401 
+          ? 'Invalid credentials' 
+          : (error.response?.data?.detail || error.message || 'Invalid email or password');
+        toast.error(errorMessage);
       }
     }
   };
@@ -203,13 +207,20 @@ export function AuthPage() {
                 <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   id="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
-                  className="border-border bg-background pl-10"
+                  className="border-border bg-background pl-10 pr-10"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   required
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-sienna transition-colors focus:outline-none"
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
               </div>
             </div>
 
