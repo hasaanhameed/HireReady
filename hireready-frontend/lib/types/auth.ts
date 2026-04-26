@@ -12,6 +12,7 @@ export interface UserResponse {
   email: string;
   name: string;
   role: UserRole;
+  target_role?: string;
 }
 
 export interface LoginRequest {

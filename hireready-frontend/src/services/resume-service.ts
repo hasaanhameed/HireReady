@@ -2,9 +2,10 @@ import axiosInstance from '@/lib/axios';
 import { ResumeParseResponse, ResumeHistoryResponse } from '@/lib/types/resume';
 
 export const resumeService = {
-  uploadAndParse: async (file: File): Promise<ResumeParseResponse> => {
+  uploadAndParse: async (file: File, targetRole: string): Promise<ResumeParseResponse> => {
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('target_role', targetRole);
 
     const response = await axiosInstance.post<ResumeParseResponse>('/resume/parse', formData, {
       headers: {

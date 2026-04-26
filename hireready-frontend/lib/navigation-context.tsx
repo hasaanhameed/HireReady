@@ -37,6 +37,7 @@ interface NavigationContextType {
   login: (token: string, fallbackRole?: UserRole) => void;
   logout: () => void;
   toggleSidebar: () => void;
+  refreshUserData: () => Promise<void>;
 }
 
 const NavigationContext = createContext<NavigationContextType | undefined>(undefined);
@@ -53,7 +54,7 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
     try {
       const base64Url = token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
       }).join(''));
       return JSON.parse(jsonPayload);
@@ -101,7 +102,7 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
     if (role) {
       setCurrentRole(role);
       setIsLoggedIn(true);
-      
+
       // Fetch user data if it's not a demo login
       if (token !== 'demo-token') {
         authService.getCurrentUser().then(setUserData);
@@ -137,6 +138,15 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
     setSidebarCollapsed((prev) => !prev);
   };
 
+  const refreshUserData = async () => {
+    try {
+      const data = await authService.getCurrentUser();
+      setUserData(data);
+    } catch (error) {
+      console.error('Failed to refresh user data:', error);
+    }
+  };
+
   return (
     <NavigationContext.Provider
       value={{
@@ -150,6 +160,7 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
         login,
         logout,
         toggleSidebar,
+        refreshUserData,
       }}
     >
       {children}

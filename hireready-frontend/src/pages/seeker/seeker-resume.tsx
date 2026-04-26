@@ -1,18 +1,28 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { SkillBadge } from '@/components/skill-badge';
 import { useResume } from '@/hooks/use-resume';
+import { useNavigation } from '@/lib/navigation-context';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Upload, FileText, X, Search, Info, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
 export function SeekerResume() {
+  const { userData, refreshUserData } = useNavigation();
   const { history, skills, isLoading, isUploading, uploadResume } = useResume();
   const [dragActive, setDragActive] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [targetRole, setTargetRole] = useState('');
+  const [targetRole, setTargetRole] = useState(userData?.target_role || '');
+
+  // Sync targetRole with userData when it loads
+  useEffect(() => {
+    if (userData?.target_role) {
+      setTargetRole(userData.target_role);
+    }
+  }, [userData?.target_role]);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -46,10 +56,11 @@ export function SeekerResume() {
   };
 
   const handleAnalyze = async () => {
-    if (!selectedFile) return;
+    if (!selectedFile || !targetRole) return;
     try {
-      await uploadResume(selectedFile);
+      await uploadResume(selectedFile, targetRole);
       setSelectedFile(null);
+      await refreshUserData(); // Refresh profile to get the new target role
     } catch (error) {
       // Error is handled in the hook's toast
     }
@@ -131,22 +142,33 @@ export function SeekerResume() {
 
             <div className="relative">
               <label className="mb-2 block text-sm font-medium text-foreground">
-                Target Role (Optional)
+                Target Role <span className="text-sienna">*</span>
               </label>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  value={targetRole}
-                  onChange={(e) => setTargetRole(e.target.value)}
-                  placeholder="e.g., Senior Frontend Developer"
-                  className="border-border bg-background pl-10"
-                />
-              </div>
+              <Select value={targetRole} onValueChange={setTargetRole}>
+                <SelectTrigger className="w-full bg-background">
+                  <SelectValue placeholder="Select a target role" />
+                </SelectTrigger>
+                <SelectContent>
+                  {[
+                    'Network Engineering',
+                    'Software Engineering',
+                    'Data Engineering',
+                    'Data Science & Analytics',
+                    'DevOps & Automation',
+                    'IT & Security',
+                    'Backend Engineering'
+                  ].map((role) => (
+                    <SelectItem key={role} value={role}>
+                      {role}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <Button
-              className="w-full bg-sienna text-warm-white hover:bg-sienna/90 cursor-pointer disabled:opacity-50"
-              disabled={!selectedFile || isUploading}
+              className="w-full bg-sienna text-warm-white hover:bg-sienna/90 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={!selectedFile || !targetRole || isUploading}
               onClick={handleAnalyze}
             >
               {isUploading ? (

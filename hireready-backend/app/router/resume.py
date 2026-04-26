@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException, status, Depends
+from fastapi import APIRouter, UploadFile, File, Form, HTTPException, status, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from typing import List
@@ -15,6 +15,7 @@ router = APIRouter(
 @router.post("/parse", response_model=ResumeParseResponse)
 async def parse_resume_endpoint(
     file: UploadFile = File(...),
+    target_role: str = Form(...),
     current_user: any = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -35,6 +36,12 @@ async def parse_resume_endpoint(
         # Save to database
         # Note: current_user is a Row object from fetchone()
         user_id = current_user.id
+        
+        # Update user's target role
+        db.execute(
+            text("UPDATE users SET target_role = :target_role WHERE id = :user_id"),
+            {"target_role": target_role, "user_id": user_id}
+        )
         
         db.execute(
             text("""

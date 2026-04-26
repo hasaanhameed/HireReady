@@ -26,10 +26,10 @@ export function useResume() {
     }
   }, []);
 
-  const uploadResume = async (file: File) => {
+  const uploadResume = async (file: File, targetRole: string) => {
     setIsUploading(true);
     try {
-      const result = await resumeService.uploadAndParse(file);
+      const result = await resumeService.uploadAndParse(file, targetRole);
       toast.success('Resume parsed successfully!');
       // Refresh skills and history after successful upload
       await refreshData();

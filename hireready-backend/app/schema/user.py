@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-
+from typing import Optional
 
 class UserCreate(BaseModel):
     name: str
@@ -12,6 +12,7 @@ class UserResponse(BaseModel):
     email: str
     name: str
     role: str
+    target_role: Optional[str] = None
 
 class LoginRequest(BaseModel):
     email: str
