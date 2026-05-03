@@ -8,6 +8,7 @@ from app.schema.resume import ResumeParseResponse, ResumeHistoryResponse, Resume
 from app.database.connection import get_db
 from app.services.auth import get_current_user
 from app.services.gap_analysis_service import perform_gap_analysis
+from app.services.roadmap_service import update_roadmap_for_gap_analysis
 
 router = APIRouter(
     prefix="/resume",
@@ -84,11 +85,12 @@ async def parse_resume_endpoint(
         # Serialize missing_skills for JSONB
         missing_skills_json = json.dumps([{"name": s.name, "importance": s.importance} for s in skills_missing])
         
-        # Insert into gap_analyses
-        db.execute(
+        # Insert into gap_analyses and get the ID
+        gap_res = db.execute(
             text("""
                 INSERT INTO gap_analyses (user_id, target_role, match_percentage, missing_skills, present_skills)
                 VALUES (:user_id, :target_role, :match_percentage, :missing_skills, :present_skills)
+                RETURNING id
             """),
             {
                 "user_id": user_id,
@@ -97,8 +99,19 @@ async def parse_resume_endpoint(
                 "missing_skills": missing_skills_json,
                 "present_skills": skills_you_have
             }
-        )
+        ).fetchone()
+        
         db.commit()
+
+        # 4. Generate/Update learning roadmap
+        if gap_res:
+            await update_roadmap_for_gap_analysis(
+                db=db,
+                user_id=user_id,
+                gap_analysis_id=gap_res.id,
+                missing_skills=skills_missing,
+                target_role=target_role
+            )
         
         return result
     except Exception as e:
