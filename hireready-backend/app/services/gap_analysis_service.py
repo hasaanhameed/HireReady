@@ -14,6 +14,53 @@ except Exception as e:
     print(f"Failed to load knowledge base from {KNOWLEDGE_BASE_PATH}: {e}")
     knowledge_base = {}
 
+VAGUE_SKILLS = {
+    # Broad / Academic Terms
+    'computer science', 'software engineering', 'software development', 
+    'information technology', 'engineering', 'programming', 
+    'development', 'technical skills', 'programming languages',
+    'software', 'design', 'architecture', 'application development',
+    'analytics', 'data science',
+    
+    # Soft Skills
+    'problem solving', 'problemsolving skills', 'analytical skills', 
+    'communication', 'communication skills', 'interpersonal skills',
+    'teamwork', 'leadership', 'management', 'project management',
+    'attention to detail', 'multitasking', 'organizational skills',
+    'organization', 'verbal communication', 'written communication',
+    'documentation', 'technical writing', 'training', 'presentation skills',
+    'collaboration', 'creativity', 'critical thinking', 'flexibility',
+    'adaptability', 'time management', 'customer service',
+    
+    # Generic Categories / Tools
+    'microsoft office', 'office', 'windows', 'excel', 'word', 'powerpoint',
+    'data analysis', 'data security', 'security', 'automation', 
+    'testing', 'performance optimization', 'deployment',
+    'monitoring', 'troubleshooting', 'debugging', 'agile', 'apis'
+}
+
+def is_vague(skill: str, target_role: str) -> bool:
+    s = skill.lower().strip()
+    t = target_role.lower().strip()
+    
+    # Check against blacklist
+    if s in VAGUE_SKILLS:
+        return True
+    
+    # Check if skill is too similar to target role
+    if s == t:
+        return True
+        
+    # If the skill name is a subset of the target role name (e.g. "Engineering" in "Software Engineering")
+    # or if the target role name is a subset of the skill (e.g. "Software Engineering" in "Software Engineering Principles")
+    words_s = set(s.split())
+    words_t = set(t.split())
+    
+    if len(words_s) > 0 and words_s.issubset(words_t):
+        return True
+        
+    return False
+
 def perform_gap_analysis(user_skills: List[str], target_role: str) -> Tuple[int, List[str], List[Skill]]:
     """
     Compares user_skills against the top 20 required skills for target_role from the knowledge base.
@@ -31,8 +78,14 @@ def perform_gap_analysis(user_skills: List[str], target_role: str) -> Tuple[int,
     # Sort all role skills by frequency descending
     sorted_role_skills = sorted(role_data.items(), key=lambda item: item[1], reverse=True)
     
+    # Filter out skills that are vague or redundant with the target role
+    filtered_role_skills = [
+        (skill, freq) for skill, freq in sorted_role_skills
+        if not is_vague(skill, target_role)
+    ]
+    
     # Take the top 20 skills as our baseline
-    top_20_skills = sorted_role_skills[:20]
+    top_20_skills = filtered_role_skills[:20]
     
     # Calculate the total weight (sum of frequencies) for the top 20
     total_top_20_weight = sum(freq for skill, freq in top_20_skills)
