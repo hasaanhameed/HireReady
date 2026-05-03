@@ -20,44 +20,65 @@ async def get_my_gap_analysis(
     db: Session = Depends(get_db)
 ):
     """
-    Performs a gap analysis for the current user based on their cumulative skills
-    and their target role.
+    Performs a real-time gap analysis based on the centralized skills list 
+    in the users table.
     """
     # 1. Ensure user has a target role
-    target_role = current_user.target_role
+    target_role = current_user["target_role"]
     if not target_role:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Target role is not set. Please set a target role during resume upload."
+            detail="Target role is not set. Please upload your resume first."
         )
 
-    # 1. Query the most recent gap analysis for the user
-    result = db.execute(
-        text("""
-            SELECT target_role, match_percentage, missing_skills, present_skills 
-            FROM gap_analyses 
-            WHERE user_id = :user_id 
-            ORDER BY created_at DESC 
-            LIMIT 1
-        """),
-        {"user_id": current_user.id}
+    # 2. Get the latest skills and parse if they are stored as a JSON string
+    user_skills_raw = current_user["skills"]
+    if isinstance(user_skills_raw, str):
+        try:
+            user_skills = json.loads(user_skills_raw)
+        except:
+            user_skills = []
+    elif user_skills_raw is None:
+        user_skills = []
+    else:
+        user_skills = user_skills_raw
+    
+    # 3. Perform real-time gap analysis
+    overall_match, skills_you_have, skills_missing = perform_gap_analysis(
+        user_skills=user_skills,
+        target_role=target_role
+    )
+    
+    # 4. Update the latest gap_analyses record
+    latest_gap = db.execute(
+        text("SELECT id FROM gap_analyses WHERE user_id = :user_id ORDER BY created_at DESC LIMIT 1"),
+        {"user_id": current_user["id"]}
     ).fetchone()
     
-    if not result:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="No gap analysis found. Please upload a resume to generate one."
+    if latest_gap:
+        missing_skills_json = json.dumps([{"name": s.name, "importance": s.importance} for s in skills_missing])
+        # Note: present_skills is a TEXT[] array, so we pass the list directly.
+        # missing_skills is a JSONB column, so we pass the JSON string.
+        db.execute(
+            text("""
+                UPDATE gap_analyses 
+                SET match_percentage = :match, 
+                    present_skills = :present, 
+                    missing_skills = :missing
+                WHERE id = :id
+            """),
+            {
+                "match": overall_match,
+                "present": skills_you_have,
+                "missing": missing_skills_json,
+                "id": latest_gap[0]
+            }
         )
-        
-    # Handle missing_skills which might be a string or a list depending on the driver
-    missing_skills_data = result.missing_skills
-    if isinstance(missing_skills_data, str):
-        missing_skills_data = json.loads(missing_skills_data)
-        
-    return GapAnalysisResponse(
-        targetRole=result.target_role,
-        overallMatch=int(result.match_percentage) if result.match_percentage is not None else 0,
-        skillsYouHave=result.present_skills if result.present_skills else [],
-        skillsMissing=missing_skills_data if missing_skills_data else []
-    )
+        db.commit()
 
+    return GapAnalysisResponse(
+        targetRole=target_role,
+        overallMatch=overall_match,
+        skillsYouHave=skills_you_have,
+        skillsMissing=[{"name": s.name, "importance": s.importance} for s in skills_missing]
+    )

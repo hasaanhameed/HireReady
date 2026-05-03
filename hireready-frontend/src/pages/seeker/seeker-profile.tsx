@@ -1,24 +1,30 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { SkillBadge } from '@/components/skill-badge';
-import { currentJobSeeker, matchScoreHistory } from '@/lib/mock-data';
-import { useNavigation } from '@/lib/navigation-context';
-import { useResume } from '@/hooks/use-resume';
-import { MapPin, Target, FileText, Calendar, Loader2 } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
+import { useProfile } from '@/hooks/use-profile';
+import { Target, FileText, Calendar, Loader2 } from 'lucide-react';
 
 export function SeekerProfile() {
-  const { userData } = useNavigation();
-  const { skills, history, isLoading } = useResume();
-  const userName = userData?.name || 'User';
-  const initials = userName.split(' ').map(n => n[0]).join('').toUpperCase();
+  const { data, isLoading, error } = useProfile();
 
   if (isLoading) {
     return (
-      <div className="flex h-[60vh] items-center justify-center">
+      <div className="flex h-[60vh] flex-col items-center justify-center gap-4 animate-liquid">
         <Loader2 className="h-8 w-8 animate-spin text-sienna" />
+        <p className="text-sm font-medium text-muted-foreground animate-pulse">Retrieving your profile...</p>
       </div>
     );
   }
+
+  if (error || !data) {
+    return (
+      <div className="flex h-[60vh] flex-col items-center justify-center gap-4">
+        <p className="text-muted-foreground">{error || "Failed to load profile"}</p>
+      </div>
+    );
+  }
+
+  const userName = data.name || 'User';
+  const initials = userName.split(' ').map(n => n[0]).join('').toUpperCase();
 
   return (
     <div className="space-y-6 animate-liquid">
@@ -43,32 +49,27 @@ export function SeekerProfile() {
               <div className="mt-2 flex flex-col items-center gap-2 md:flex-row md:items-start">
                 <div className="flex items-center gap-1 text-muted-foreground">
                   <Target className="h-4 w-4 text-sienna" />
-                  <span className="text-sm">{currentJobSeeker.targetRole}</span>
-                </div>
-                <span className="hidden text-border md:inline">|</span>
-                <div className="flex items-center gap-1 text-muted-foreground">
-                  <MapPin className="h-4 w-4 text-sienna" />
-                  <span className="text-sm">{currentJobSeeker.location}</span>
+                  <span className="text-sm">{data.target_role || "No Target Role Set"}</span>
                 </div>
               </div>
               <div className="mt-4 flex items-center justify-center gap-4 md:justify-start">
                 <div className="text-center">
                   <p className="text-2xl font-bold text-sienna">
-                    {currentJobSeeker.matchScore}%
+                    {data.match_score}%
                   </p>
                   <p className="text-xs text-muted-foreground">Match Score</p>
                 </div>
                 <div className="h-10 w-px bg-border" />
                 <div className="text-center">
                   <p className="text-2xl font-bold text-foreground">
-                    {skills.length}
+                    {data.skills_count}
                   </p>
                   <p className="text-xs text-muted-foreground">Skills</p>
                 </div>
                 <div className="h-10 w-px bg-border" />
                 <div className="text-center">
                   <p className="text-2xl font-bold text-foreground">
-                    {history.length}
+                    {data.resumes_count}
                   </p>
                   <p className="text-xs text-muted-foreground">Resumes</p>
                 </div>
@@ -78,7 +79,7 @@ export function SeekerProfile() {
         </CardContent>
       </Card>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6">
         {/* Current Skills */}
         <Card className="border-border/50 shadow-sm bg-card">
           <CardHeader className="pb-2">
@@ -87,62 +88,15 @@ export function SeekerProfile() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {skills.length > 0 ? (
+            {data.skills.length > 0 ? (
               <div className="flex flex-wrap gap-2">
-                {skills.map((skill) => (
+                {data.skills.map((skill) => (
                   <SkillBadge key={skill} skill={skill} variant="filled" />
                 ))}
               </div>
             ) : (
               <p className="text-sm text-muted-foreground">No skills extracted yet.</p>
             )}
-          </CardContent>
-        </Card>
-
-        {/* Match Score History */}
-        <Card className="border-border/50 shadow-sm bg-card">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-semibold text-foreground font-heading">
-              Match Score History
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="h-40">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={matchScoreHistory}>
-                  <XAxis
-                    dataKey="month"
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fill: 'var(--muted-foreground)', fontSize: 12 }}
-                  />
-                  <YAxis
-                    domain={[0, 100]}
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fill: 'var(--muted-foreground)', fontSize: 12 }}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: 'var(--card)',
-                      border: '1px solid var(--border)',
-                      borderRadius: '8px',
-                      color: 'var(--foreground)',
-                    }}
-                    itemStyle={{ color: 'var(--foreground)' }}
-                    formatter={(value: number) => [`${value}%`, 'Match Score']}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="score"
-                    stroke="var(--sienna)"
-                    strokeWidth={3}
-                    dot={{ fill: 'var(--sienna)', r: 4, strokeWidth: 2, stroke: 'var(--card)' }}
-                    activeDot={{ r: 6, strokeWidth: 0 }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
           </CardContent>
         </Card>
       </div>
@@ -155,9 +109,9 @@ export function SeekerProfile() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {history.length > 0 ? (
+          {data.resume_history.length > 0 ? (
             <div className="space-y-3">
-              {history.map((item, index) => (
+              {data.resume_history.map((item, index) => (
                 <div
                   key={item.id}
                   className="flex items-center gap-4 rounded-lg border border-border bg-background p-4 hover:bg-muted/10 transition-colors"
