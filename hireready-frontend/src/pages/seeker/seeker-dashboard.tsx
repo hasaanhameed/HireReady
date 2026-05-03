@@ -3,12 +3,34 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { MatchScoreRing } from '@/components/match-score-ring';
 import { SkillBadge } from '@/components/skill-badge';
-import { currentJobSeeker, gapAnalysis, topMissingSkills, learningResources, jobSeekerApplications } from '@/lib/mock-data';
-import { ArrowRight, BookOpen, Clock, ExternalLink } from 'lucide-react';
+import { useDashboard } from '@/hooks/use-dashboard';
+import { jobSeekerApplications } from '@/lib/mock-data';
+import { ArrowRight, Loader2, CheckCircle2 } from 'lucide-react';
 
 export function SeekerDashboard() {
   const { navigate, userData } = useNavigation();
-  const userName = userData?.name || currentJobSeeker.name;
+  const { data, isLoading, error } = useDashboard();
+  const userName = userData?.name || 'User';
+
+  if (isLoading) {
+    return (
+      <div className="flex h-[60vh] flex-col items-center justify-center gap-4 animate-liquid">
+        <Loader2 className="h-8 w-8 animate-spin text-sienna" />
+        <p className="text-sm font-medium text-muted-foreground animate-pulse">Building your dashboard...</p>
+      </div>
+    );
+  }
+
+  if (error || !data) {
+    return (
+      <div className="flex h-[60vh] flex-col items-center justify-center gap-4">
+        <p className="text-muted-foreground">{error || "Failed to load dashboard"}</p>
+        <Button onClick={() => navigate('seeker-resume')} className="bg-sienna text-warm-white">
+          Go to Resume Upload
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 animate-liquid">
@@ -17,78 +39,119 @@ export function SeekerDashboard() {
         <CardContent className="p-6">
           <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
             <div>
-               <h1 className="text-2xl font-bold font-heading">Welcome back, {userName.split(' ')[0]}</h1>
+              <h1 className="text-2xl font-bold font-heading">Welcome back, {userName.split(' ')[0]}</h1>
               <p className="mt-1 text-muted-foreground">
-                Here&apos;s your progress towards becoming a <span className="text-sienna font-semibold">{currentJobSeeker.targetRole}</span>
+                Here&apos;s your progress towards becoming a <span className="text-sienna font-semibold">{data.target_role || "Professional"}</span>
               </p>
             </div>
             <div className="flex items-center gap-4">
               <div className="text-right">
                 <p className="text-sm text-muted-foreground">Overall Match</p>
-                <p className="text-2xl font-bold font-heading text-sienna">{currentJobSeeker.matchScore}%</p>
+                <p className="text-2xl font-bold font-heading text-sienna">{data.match_score}%</p>
               </div>
-              <MatchScoreRing score={currentJobSeeker.matchScore} size="md" />
+              <MatchScoreRing score={data.match_score} size="md" />
             </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Skill Gap Summary */}
-      <Card className="glass-panel">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-lg font-bold text-foreground font-heading">Your Skill Gap Summary</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-muted-foreground">Target Role</span>
-            <span className="font-semibold text-foreground">{gapAnalysis.targetRole}</span>
-          </div>
-          <div className="space-y-2">
+      <div className="grid gap-6 lg:grid-cols-2">
+        {/* Skill Gap Summary */}
+        <Card className="glass-panel">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg font-bold text-foreground font-heading">Your Skill Gap Summary</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
-               <span className="text-sm text-muted-foreground">Match Progress</span>
-               <span className="text-sm font-bold text-sienna">{gapAnalysis.overallMatch}%</span>
+              <span className="text-sm text-muted-foreground">Target Role</span>
+              <span className="font-semibold text-foreground">{data.target_role}</span>
             </div>
-            <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
-              <div
-                className="h-full rounded-full bg-sienna transition-all duration-500"
-                style={{ width: `${gapAnalysis.overallMatch}%` }}
-              />
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">Match Progress</span>
+                <span className="text-sm font-bold text-sienna">{data.match_score}%</span>
+              </div>
+              <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+                <div
+                  className="h-full rounded-full bg-sienna transition-all duration-500"
+                  style={{ width: `${data.match_score}%` }}
+                />
+              </div>
             </div>
-          </div>
-          <div>
-            <span className="text-sm text-muted-foreground">Missing Skills</span>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {gapAnalysis.skillsMissing.slice(0, 6).map((skill) => (
-                <SkillBadge key={skill.name} skill={skill.name} variant="outlined" size="sm" />
-              ))}
+            <div>
+              <span className="text-sm text-muted-foreground">Top Missing Skills</span>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {data.top_missing_skills.slice(0, 5).map((skill) => (
+                  <SkillBadge key={skill.name} skill={skill.name} variant="outlined" size="sm" />
+                ))}
+              </div>
             </div>
-          </div>
-          <Button
-            variant="outline"
-            className="w-full border-border text-foreground hover:bg-muted cursor-pointer"
-            onClick={() => navigate('seeker-gap-analysis')}
-          >
-            View Full Analysis
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        </CardContent>
-      </Card>
+            <Button
+              variant="outline"
+              className="w-full border-border text-foreground hover:bg-muted cursor-pointer mt-2"
+              onClick={() => navigate('seeker-gap-analysis')}
+            >
+              View Full Analysis
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </CardContent>
+        </Card>
 
-      {/* Top Missing Skills */}
+        {/* Roadmap Progress */}
+        <Card className="glass-panel">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg font-bold text-foreground font-heading">Learning Roadmap Progress</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div className="space-y-1">
+                <p className="text-sm text-muted-foreground">Completed Steps</p>
+                <p className="text-3xl font-bold font-heading text-foreground">{data.completed_steps} / {data.total_steps}</p>
+              </div>
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-sienna/10 text-sienna">
+                <CheckCircle2 className="h-6 w-6" />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-xs font-medium">
+                <span className="text-muted-foreground uppercase tracking-wider">Completion Rate</span>
+                <span className="text-sienna">{Math.round((data.completed_steps / (data.total_steps || 1)) * 100)}%</span>
+              </div>
+              <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+                <div
+                  className="h-full rounded-full bg-sienna transition-all duration-500"
+                  style={{ width: `${(data.completed_steps / (data.total_steps || 1)) * 100}%` }}
+                />
+              </div>
+            </div>
+
+            <Button
+              className="w-full bg-sienna text-warm-white hover:bg-sienna/90 cursor-pointer shadow-lg hover:shadow-sienna/20 transition-all"
+              onClick={() => navigate('seeker-roadmap')}
+            >
+              Continue Learning
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Top Missing Skills Breakdown */}
       <Card className="glass-panel">
         <CardHeader className="pb-2">
-          <CardTitle className="text-lg font-bold text-foreground font-heading">Top Missing Skills</CardTitle>
+          <CardTitle className="text-lg font-bold text-foreground font-heading">Top Missing Skills Market Importance</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2">
-            {topMissingSkills.map((skill) => (
+            {data.top_missing_skills.map((skill) => (
               <div
                 key={skill.name}
-                className="rounded-lg border border-border bg-background p-4"
+                className="rounded-lg border border-border bg-background/50 p-4"
               >
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-foreground">{skill.name}</span>
-                  <span className="text-sm text-muted-foreground">{skill.importance}% importance</span>
+                  <span className="text-sm text-muted-foreground">{skill.importance}%</span>
                 </div>
                 <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-muted">
                   <div
@@ -96,58 +159,16 @@ export function SeekerDashboard() {
                     style={{ width: `${skill.importance}%` }}
                   />
                 </div>
-                <p className="mt-2 text-xs text-muted-foreground font-medium">{skill.category}</p>
               </div>
             ))}
+            {data.top_missing_skills.length === 0 && (
+              <p className="text-sm text-muted-foreground col-span-2 text-center py-4">No missing skills found. Great job!</p>
+            )}
           </div>
         </CardContent>
       </Card>
 
-      {/* Recommended Learning */}
-      <Card className="glass-panel">
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-lg font-bold text-foreground font-heading">Recommended Learning</CardTitle>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-muted-foreground hover:text-sienna cursor-pointer"
-            onClick={() => navigate('seeker-roadmap')}
-          >
-            View Roadmap
-            <ArrowRight className="ml-1 h-4 w-4" />
-          </Button>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:grid-cols-2">
-             {learningResources.slice(0, 4).map((resource) => (
-              <div
-                key={resource.id}
-                className="flex items-start gap-4 rounded-lg border border-border bg-muted/20 p-4 transition-colors hover:bg-muted/40"
-              >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-muted">
-                  <BookOpen className="h-5 w-5 text-sienna" />
-                </div>
-                <div className="flex-1">
-                  <h4 className="font-bold text-foreground font-heading">{resource.title}</h4>
-                  <p className="text-sm text-muted-foreground font-medium">{resource.provider}</p>
-                  <div className="mt-2 flex items-center gap-3 text-xs text-muted-foreground/70">
-                    <span className="flex items-center gap-1">
-                      <Clock className="h-3 w-3" />
-                      {resource.duration}
-                    </span>
-                    <span className="capitalize">{resource.type}</span>
-                  </div>
-                </div>
-                <Button variant="ghost" size="icon" className="shrink-0 hover:text-sienna cursor-pointer">
-                  <ExternalLink className="h-4 w-4 text-muted-foreground" />
-                </Button>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Recent Applications */}
+      {/* Recent Applications (Static) */}
       <Card className="glass-panel">
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle className="text-lg font-bold text-foreground font-heading">Recent Applications</CardTitle>
@@ -173,18 +194,17 @@ export function SeekerDashboard() {
                 </tr>
               </thead>
               <tbody>
-                 {jobSeekerApplications.map((app) => (
+                {jobSeekerApplications.map((app) => (
                   <tr key={app.id} className="border-b border-border last:border-0 hover:bg-muted/20 transition-colors">
                     <td className="py-3 text-sm font-medium text-foreground">
-                      {app.jobId === 'job-001' ? 'Senior Frontend Developer' : 
-                       app.jobId === 'job-002' ? 'Full Stack Engineer' : 'React Developer'}
+                      {app.jobId === 'job-001' ? 'Senior Frontend Developer' :
+                        app.jobId === 'job-002' ? 'Full Stack Engineer' : 'React Developer'}
                     </td>
                     <td className="py-3">
-                      <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-bold ${
-                        app.matchScore >= 70 ? 'bg-sienna text-warm-white' :
-                        app.matchScore >= 50 ? 'bg-slate text-warm-white' :
-                        'bg-muted text-foreground'
-                      }`}>
+                      <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-bold ${app.matchScore >= 70 ? 'bg-sienna text-warm-white' :
+                          app.matchScore >= 50 ? 'bg-slate text-warm-white' :
+                            'bg-muted text-foreground'
+                        }`}>
                         {app.matchScore}%
                       </span>
                     </td>

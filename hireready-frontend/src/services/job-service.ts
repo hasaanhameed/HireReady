@@ -1,0 +1,38 @@
+import axiosInstance from '@/lib/axios';
+
+export interface JobMetadata {
+  roles: string[];
+  skills: string[];
+}
+
+export interface JobCreateRequest {
+  title: string;
+  description: string;
+  required_skills: string[];
+}
+
+export interface JobResponse {
+  id: string;
+  recruiter_id: string;
+  title: string;
+  description: string;
+  required_skills: string[];
+  created_at: string;
+}
+
+export const jobService = {
+  getMetadata: async (): Promise<JobMetadata> => {
+    const response = await axiosInstance.get<JobMetadata>('/jobs/meta');
+    return response.data;
+  },
+  
+  createJob: async (request: JobCreateRequest): Promise<JobResponse> => {
+    const response = await axiosInstance.post<JobResponse>('/jobs/', request);
+    return response.data;
+  },
+  
+  getMyPostings: async (): Promise<JobResponse[]> => {
+    const response = await axiosInstance.get<JobResponse[]>('/jobs/my-postings');
+    return response.data;
+  }
+};

@@ -1,43 +1,61 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { X, Plus, CheckCircle } from 'lucide-react';
+import { X, Plus, CheckCircle, Search, Loader2 } from 'lucide-react';
+import { useJobs } from '@/hooks/use-jobs';
+import { Input } from '@/components/ui/input';
 
 export function RecruiterPostJob() {
-  const [skills, setSkills] = useState<string[]>([]);
-  const [skillInput, setSkillInput] = useState('');
+  const { metadata, createJob, isCreating } = useJobs();
+  
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+  });
+  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [skillSearch, setSkillSearch] = useState('');
+  const [showSkillDropdown, setShowSkillDropdown] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const addSkill = () => {
-    if (skillInput.trim() && !skills.includes(skillInput.trim())) {
-      setSkills([...skills, skillInput.trim()]);
-      setSkillInput('');
+  // Filter skills based on search
+  const filteredSkills = useMemo(() => {
+    if (!metadata || !skillSearch) return [];
+    return metadata.skills
+      .filter(s => s.toLowerCase().includes(skillSearch.toLowerCase()) && !selectedSkills.includes(s))
+      .slice(0, 10);
+  }, [metadata, skillSearch, selectedSkills]);
+
+  const addSkill = (skill: string) => {
+    if (skill && !selectedSkills.includes(skill)) {
+      setSelectedSkills([...selectedSkills, skill]);
+      setSkillSearch('');
+      setShowSkillDropdown(false);
     }
   };
 
   const removeSkill = (skillToRemove: string) => {
-    setSkills(skills.filter((skill) => skill !== skillToRemove));
+    setSelectedSkills(selectedSkills.filter((skill) => skill !== skillToRemove));
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      addSkill();
-    }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    try {
+      await createJob({
+        ...formData,
+        required_skills: selectedSkills
+      });
+      setSubmitted(true);
+    } catch (err) {
+      // Error handled by hook toasts
+    }
   };
 
   if (submitted) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center">
+      <div className="flex min-h-[60vh] items-center justify-center animate-liquid">
         <Card className="max-w-md border-border/50 shadow-sm bg-card">
           <CardContent className="p-8 text-center">
             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-sienna">
@@ -49,7 +67,11 @@ export function RecruiterPostJob() {
             </p>
             <Button
               className="mt-6 bg-sienna text-warm-white hover:bg-sienna/90 cursor-pointer"
-              onClick={() => setSubmitted(false)}
+              onClick={() => {
+                setSubmitted(false);
+                setFormData({ title: '', description: '' });
+                setSelectedSkills([]);
+              }}
             >
               Post Another Job
             </Button>
@@ -58,6 +80,8 @@ export function RecruiterPostJob() {
       </div>
     );
   }
+
+  const isTitleSelected = !!formData.title;
 
   return (
     <div className="space-y-6 animate-liquid">
@@ -71,7 +95,7 @@ export function RecruiterPostJob() {
       <form onSubmit={handleSubmit}>
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Left Column */}
-          <Card className="border-border/50 shadow-sm bg-card">
+          <Card className={`border-border/50 shadow-sm bg-card transition-opacity duration-300`}>
             <CardHeader className="pb-2">
               <CardTitle className="text-lg font-semibold text-foreground">
                 Job Details
@@ -82,30 +106,39 @@ export function RecruiterPostJob() {
                 <Label htmlFor="title" className="text-foreground">
                   Job Title
                 </Label>
-                <Input
-                  id="title"
-                  placeholder="e.g., Senior Frontend Developer"
-                  className="border-border bg-background"
-                  required
-                />
+                <Select 
+                  value={formData.title} 
+                  onValueChange={(val) => setFormData(prev => ({ ...prev, title: val }))}
+                >
+                  <SelectTrigger id="title" className="border-border bg-background">
+                    <SelectValue placeholder="Select target role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {metadata?.roles.map(role => (
+                      <SelectItem key={role} value={role}>{role}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
-              <div className="space-y-2">
+              <div className={`space-y-2 transition-all duration-500 ${!isTitleSelected ? 'opacity-40 pointer-events-none grayscale' : 'opacity-100'}`}>
                 <Label htmlFor="description" className="text-foreground">
                   Job Description
                 </Label>
                 <Textarea
                   id="description"
+                  value={formData.description}
+                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                   placeholder="Describe the role, responsibilities, and what you're looking for..."
                   className="min-h-[200px] border-border bg-background"
-                  required
+                  required={isTitleSelected}
                 />
               </div>
             </CardContent>
           </Card>
 
           {/* Right Column */}
-          <div className="space-y-6">
+          <div className={`space-y-6 transition-all duration-500 ${!isTitleSelected ? 'opacity-40 pointer-events-none grayscale' : 'opacity-100'}`}>
             <Card className="border-border/50 shadow-sm bg-card">
               <CardHeader className="pb-2">
                 <CardTitle className="text-lg font-semibold text-foreground">
@@ -113,44 +146,64 @@ export function RecruiterPostJob() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="space-y-2">
+                <div className="space-y-2 relative">
                   <Label className="text-foreground">Required Skills</Label>
-                  <div className="flex gap-2">
+                  <div className="relative">
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                      <Search className="h-4 w-4" />
+                    </div>
                     <Input
-                      value={skillInput}
-                      onChange={(e) => setSkillInput(e.target.value)}
-                      onKeyDown={handleKeyDown}
-                      placeholder="Add a skill (e.g., React)"
-                      className="border-border bg-background"
+                      value={skillSearch}
+                      onChange={(e) => {
+                        setSkillSearch(e.target.value);
+                        setShowSkillDropdown(true);
+                      }}
+                      onFocus={() => setShowSkillDropdown(true)}
+                      placeholder="Search and add skills..."
+                      className="pl-9 border-border bg-background"
                     />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="shrink-0 border-border cursor-pointer hover:bg-muted"
-                      onClick={addSkill}
-                    >
-                      <Plus className="h-4 w-4" />
-                    </Button>
                   </div>
-                  {skills.length > 0 && (
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      {skills.map((skill) => (
-                        <span
-                          key={skill}
-                          className="inline-flex items-center gap-1 rounded-full bg-sienna/10 px-3 py-1 text-sm text-sienna font-medium border border-sienna/20"
-                        >
-                          {skill}
+
+                  {/* Searchable Dropdown */}
+                  {showSkillDropdown && filteredSkills.length > 0 && (
+                    <div className="absolute z-50 mt-1 w-full rounded-md border border-border bg-popover shadow-xl animate-in fade-in zoom-in-95 duration-200">
+                      <div className="p-1">
+                        {filteredSkills.map((skill) => (
                           <button
+                            key={skill}
                             type="button"
-                            onClick={() => removeSkill(skill)}
-                            className="hover:text-sienna/70 transition-colors cursor-pointer"
+                            className="flex w-full items-center px-3 py-2 text-sm text-foreground hover:bg-sienna/10 hover:text-sienna rounded-sm transition-colors text-left"
+                            onClick={() => addSkill(skill)}
                           >
-                            <X className="h-3 w-3" />
+                            <Plus className="mr-2 h-3 w-3" />
+                            {skill}
                           </button>
-                        </span>
-                      ))}
+                        ))}
+                      </div>
                     </div>
                   )}
+
+                  {/* Selected Skills Tags */}
+                  <div className="mt-4 flex flex-wrap gap-2 min-h-[40px]">
+                    {selectedSkills.map((skill) => (
+                      <span
+                        key={skill}
+                        className="inline-flex items-center gap-1 rounded-full bg-sienna/10 px-3 py-1 text-sm text-sienna font-medium border border-sienna/20 animate-liquid"
+                      >
+                        {skill}
+                        <button
+                          type="button"
+                          onClick={() => removeSkill(skill)}
+                          className="hover:text-sienna/70 transition-colors cursor-pointer"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </span>
+                    ))}
+                    {selectedSkills.length === 0 && (
+                      <p className="text-xs text-muted-foreground italic">No skills added yet.</p>
+                    )}
+                  </div>
                 </div>
 
                 <div className="space-y-2">
@@ -167,29 +220,22 @@ export function RecruiterPostJob() {
                     </SelectContent>
                   </Select>
                 </div>
-
-                <div className="space-y-2">
-                  <Label className="text-foreground">Job Type</Label>
-                  <Select>
-                    <SelectTrigger className="border-border bg-background">
-                      <SelectValue placeholder="Select job type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="full-time">Full-time</SelectItem>
-                      <SelectItem value="part-time">Part-time</SelectItem>
-                      <SelectItem value="contract">Contract</SelectItem>
-                      <SelectItem value="remote">Remote</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
               </CardContent>
             </Card>
 
             <Button
               type="submit"
-              className="w-full bg-sienna text-warm-white hover:bg-sienna/90 cursor-pointer"
+              disabled={isCreating || !formData.title || !formData.description || selectedSkills.length === 0}
+              className="w-full bg-sienna text-warm-white hover:bg-sienna/90 cursor-pointer shadow-lg hover:shadow-sienna/20 transition-all disabled:opacity-50"
             >
-              Post Job
+              {isCreating ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Posting Job...
+                </>
+              ) : (
+                'Post Job'
+              )}
             </Button>
           </div>
         </div>
