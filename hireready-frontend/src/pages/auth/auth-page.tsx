@@ -17,7 +17,7 @@ export function AuthPage() {
   const { login, register, isLoading } = useAuth();
   const [mode, setMode] = useState<AuthMode>(pageParams?.mode || 'login');
   const [selectedRole, setSelectedRole] = useState<'job-seeker' | 'recruiter'>(pageParams?.role || 'job-seeker');
-  const [formData, setFormData] = useState({ name: '', company: '', email: '', password: '', confirmPassword: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -35,7 +35,7 @@ export function AuthPage() {
       }
       try {
         await register({
-          name: formData.name || formData.email.split('@')[0], 
+          name: formData.name || formData.email.split('@')[0],
           email: formData.email,
           password: formData.password,
           role: selectedRole
@@ -44,7 +44,8 @@ export function AuthPage() {
         setMode('login');
         setFormData(prev => ({ ...prev, password: '', confirmPassword: '' }));
       } catch (error: any) {
-        toast.error(error.message || 'Failed to create account');
+        const errorMessage = error.response?.data?.detail || error.message || 'Failed to create account';
+        toast.error(errorMessage);
       }
     } else {
       try {
@@ -54,8 +55,8 @@ export function AuthPage() {
         });
         toast.success('Welcome back!');
       } catch (error: any) {
-        const errorMessage = error.response?.status === 401 
-          ? 'Invalid credentials' 
+        const errorMessage = error.response?.status === 401
+          ? 'Invalid credentials'
           : (error.response?.data?.detail || error.message || 'Invalid email or password');
         toast.error(errorMessage);
       }
@@ -114,40 +115,40 @@ export function AuthPage() {
             {mode === 'signup' && (
               <div className="space-y-3">
                 <div className="grid grid-cols-2 gap-3">
-                    <button
-                      type="button"
-                      onClick={() => setSelectedRole('job-seeker')}
-                      className={cn(
-                        "flex flex-col items-center gap-3 rounded-lg border-2 p-4 transition-all",
-                        selectedRole === 'job-seeker'
-                          ? "border-sienna bg-muted/50"
-                          : "border-border hover:border-slate"
-                      )}
-                    >
-                      <span className={cn(
-                        "text-sm font-bold font-heading",
-                        selectedRole === 'job-seeker' ? "text-sienna" : "text-muted-foreground"
-                      )}>
-                        Job Seeker
-                      </span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setSelectedRole('recruiter')}
-                      className={cn(
-                        "flex flex-col items-center gap-3 rounded-lg border-2 p-4 transition-all",
-                        selectedRole === 'recruiter'
-                          ? "border-sienna bg-muted/50"
-                          : "border-border hover:border-slate"
-                      )}
-                    >
-                      <span className={cn(
-                        "text-sm font-bold font-heading",
-                        selectedRole === 'recruiter' ? "text-sienna" : "text-muted-foreground"
-                      )}>
-                        Recruiter
-                      </span>
-                    </button>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedRole('job-seeker')}
+                    className={cn(
+                      "flex flex-col items-center gap-3 rounded-lg border-2 p-4 transition-all",
+                      selectedRole === 'job-seeker'
+                        ? "border-sienna bg-muted/50"
+                        : "border-border hover:border-slate"
+                    )}
+                  >
+                    <span className={cn(
+                      "text-sm font-bold font-heading",
+                      selectedRole === 'job-seeker' ? "text-sienna" : "text-muted-foreground"
+                    )}>
+                      Job Seeker
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedRole('recruiter')}
+                    className={cn(
+                      "flex flex-col items-center gap-3 rounded-lg border-2 p-4 transition-all",
+                      selectedRole === 'recruiter'
+                        ? "border-sienna bg-muted/50"
+                        : "border-border hover:border-slate"
+                    )}
+                  >
+                    <span className={cn(
+                      "text-sm font-bold font-heading",
+                      selectedRole === 'recruiter' ? "text-sienna" : "text-muted-foreground"
+                    )}>
+                      Recruiter
+                    </span>
+                  </button>
                 </div>
               </div>
             )}
@@ -169,34 +170,17 @@ export function AuthPage() {
               </div>
             )}
 
-            {/* Recruiter-specific fields */}
-            {mode === 'signup' && selectedRole === 'recruiter' && (
-              <div className="space-y-2">
-                <Label htmlFor="company" className="text-foreground font-medium">Company Name</Label>
-                <div className="relative">
-                  <Building2 className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input
-                    id="company"
-                    placeholder="TechCorp Inc."
-                    className="border-border bg-background pl-10"
-                    value={formData.company}
-                    onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                  />
-                </div>
-              </div>
-            )}
-
             {/* Email */}
             <div className="space-y-2">
               <Label htmlFor="email" className="text-foreground font-medium">
-                {mode === 'signup' && selectedRole === 'recruiter' ? 'Work Email' : 'Email'}
+                Email
               </Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   id="email"
                   type="email"
-                  placeholder={mode === 'signup' && selectedRole === 'recruiter' ? 'you@company.com' : 'you@example.com'}
+                  placeholder="you@example.com"
                   className="border-border bg-background pl-10"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}

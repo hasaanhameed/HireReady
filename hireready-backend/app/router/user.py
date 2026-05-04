@@ -21,7 +21,7 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     ).fetchone()
     
     if existing_user:
-        raise HTTPException(status_code=400, detail="Email already registered")
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Email already registered")
         
     # Hash the password
     hashed_password = get_password_hash(user.password)
