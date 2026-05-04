@@ -229,8 +229,7 @@ export function RecruiterPostJob() {
                         <SelectValue placeholder="Select level" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="entry">Entry Level</SelectItem>
-                        <SelectItem value="mid">Mid Level</SelectItem>
+                        <SelectItem value="junior">Junior Level</SelectItem>
                         <SelectItem value="senior">Senior Level</SelectItem>
                       </SelectContent>
                     </Select>
