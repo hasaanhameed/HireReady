@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 
 export function RecruiterPostJob() {
   const { metadata, createJob, isCreating } = useJobs();
-  
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -106,8 +106,8 @@ export function RecruiterPostJob() {
                 <Label htmlFor="title" className="text-foreground">
                   Job Title
                 </Label>
-                <Select 
-                  value={formData.title} 
+                <Select
+                  value={formData.title}
                   onValueChange={(val) => setFormData(prev => ({ ...prev, title: val }))}
                 >
                   <SelectTrigger id="title" className="border-border bg-background">
@@ -216,7 +216,6 @@ export function RecruiterPostJob() {
                       <SelectItem value="entry">Entry Level</SelectItem>
                       <SelectItem value="mid">Mid Level</SelectItem>
                       <SelectItem value="senior">Senior Level</SelectItem>
-                      <SelectItem value="lead">Lead / Principal</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
