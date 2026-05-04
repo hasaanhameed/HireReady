@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 export function useJobs() {
   const [metadata, setMetadata] = useState<JobMetadata | null>(null);
   const [postings, setPostings] = useState<JobResponse[]>([]);
+  const [allJobs, setAllJobs] = useState<JobResponse[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
 
@@ -24,6 +25,18 @@ export function useJobs() {
       setPostings(data);
     } catch (err) {
       console.error('Failed to fetch postings:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const fetchAllJobs = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const data = await jobService.getAllJobs();
+      setAllJobs(data);
+    } catch (err) {
+      console.error('Failed to fetch all jobs:', err);
     } finally {
       setIsLoading(false);
     }
@@ -55,9 +68,11 @@ export function useJobs() {
   return {
     metadata,
     postings,
+    allJobs,
     isLoading,
     isCreating,
     fetchMyPostings,
+    fetchAllJobs,
     createJob
   };
 }

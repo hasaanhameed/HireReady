@@ -14,11 +14,13 @@ import {
   TrendingUp,
   ChevronLeft,
   X,
+  Search,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const seekerNavItems = [
   { page: 'seeker-dashboard' as const, label: 'Dashboard', icon: LayoutDashboard },
+  { page: 'seeker-job-postings' as const, label: 'Find Jobs', icon: Search },
   { page: 'seeker-resume' as const, label: 'My Resume', icon: FileText },
   { page: 'seeker-gap-analysis' as const, label: 'Gap Analysis', icon: BarChart3 },
   { page: 'seeker-roadmap' as const, label: 'Learning Roadmap', icon: BookOpen },

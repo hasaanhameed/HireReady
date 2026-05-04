@@ -1,17 +1,19 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
-import type { UserRole } from './types';
-import type { UserResponse } from './types/auth';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { authService } from '@/services/auth-service';
+import { UserResponse } from './types/auth';
 
-type Page =
-  | 'landing'
+export type Role = 'job-seeker' | 'recruiter' | 'admin';
+
+export type Page = 
+  | 'landing' 
   | 'auth'
-  // Job Seeker pages
+  // Seeker pages
   | 'seeker-dashboard'
   | 'seeker-resume'
   | 'seeker-gap-analysis'
   | 'seeker-roadmap'
   | 'seeker-applications'
+  | 'seeker-job-postings'
   | 'seeker-profile'
   // Recruiter pages
   | 'recruiter-dashboard'
@@ -28,139 +30,99 @@ type Page =
 
 interface NavigationContextType {
   currentPage: Page;
-  currentRole: UserRole | null;
-  isLoggedIn: boolean;
+  currentRole: Role | null;
   userData: UserResponse | null;
+  isLoggedIn: boolean;
   sidebarCollapsed: boolean;
   pageParams: any;
   navigate: (page: Page, params?: any) => void;
-  login: (token: string, fallbackRole?: UserRole) => void;
+  login: (token: string, role: Role) => void;
   logout: () => void;
   toggleSidebar: () => void;
-  refreshUserData: () => Promise<void>;
+  refreshUser: () => Promise<void>;
 }
 
 const NavigationContext = createContext<NavigationContextType | undefined>(undefined);
 
-export function NavigationProvider({ children }: { children: ReactNode }) {
+export function NavigationProvider({ children }: { children: React.ReactNode }) {
   const [currentPage, setCurrentPage] = useState<Page>('landing');
-  const [currentRole, setCurrentRole] = useState<UserRole | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentRole, setCurrentRole] = useState<Role | null>(null);
   const [userData, setUserData] = useState<UserResponse | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [pageParams, setPageParams] = useState<any>({});
+  const [pageParams, setPageParams] = useState<any>(null);
 
-  const decodeToken = (token: string) => {
+  const refreshUser = useCallback(async () => {
     try {
-      const base64Url = token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      }).join(''));
-      return JSON.parse(jsonPayload);
-    } catch (e) {
-      return null;
-    }
-  };
-
-  useEffect(() => {
-    const token = localStorage.getItem('auth_token');
-    if (token) {
-      const decoded = decodeToken(token);
-      if (decoded && decoded.role) {
-        setIsLoggedIn(true);
-        setCurrentRole(decoded.role as UserRole);
-        // Fetch full user data
-        authService.getCurrentUser()
-          .then(setUserData)
-          .catch(() => {
-            localStorage.removeItem('auth_token');
-            setIsLoggedIn(false);
-            setCurrentRole(null);
-          });
-      } else {
-        localStorage.removeItem('auth_token');
-      }
+      const user = await authService.getCurrentUser();
+      setUserData(user);
+    } catch (err) {
+      console.error('Failed to fetch user data:', err);
     }
   }, []);
 
-  const navigate = (page: Page, params?: any) => {
+  // Check for stored auth on mount
+  useEffect(() => {
+    const token = localStorage.getItem('auth_token');
+    const role = localStorage.getItem('user_role') as Role;
+    const lastPage = localStorage.getItem('last_page') as Page;
+
+    if (token && role) {
+      setIsLoggedIn(true);
+      setCurrentRole(role);
+      refreshUser();
+      if (lastPage && lastPage !== 'auth') {
+        setCurrentPage(lastPage);
+      } else {
+        setCurrentPage(role === 'job-seeker' ? 'seeker-dashboard' : role === 'recruiter' ? 'recruiter-dashboard' : 'admin-dashboard');
+      }
+    }
+  }, [refreshUser]);
+
+  const navigate = (page: Page, params: any = null) => {
     setCurrentPage(page);
-    setPageParams(params || {});
+    setPageParams(params);
+    localStorage.setItem('last_page', page);
+    window.scrollTo(0, 0);
   };
 
-  const login = (token: string, fallbackRole?: UserRole) => {
-    let role = fallbackRole;
-    if (token !== 'demo-token') {
-      localStorage.setItem('auth_token', token);
-      const decoded = decodeToken(token);
-      if (decoded && decoded.role) {
-        role = decoded.role as UserRole;
-      }
-    }
-
-    if (role) {
-      setCurrentRole(role);
-      setIsLoggedIn(true);
-
-      // Fetch user data if it's not a demo login
-      if (token !== 'demo-token') {
-        authService.getCurrentUser().then(setUserData);
-      } else {
-        // Set mock user data for demo
-        setUserData({
-          id: 'demo',
-          email: 'demo@example.com',
-          name: 'Demo User',
-          role: role
-        });
-      }
-
-      if (role === 'job-seeker') {
-        setCurrentPage('seeker-dashboard');
-      } else if (role === 'recruiter') {
-        setCurrentPage('recruiter-dashboard');
-      } else {
-        setCurrentPage('admin-dashboard');
-      }
-    }
+  const login = (token: string, role: Role) => {
+    localStorage.setItem('auth_token', token);
+    localStorage.setItem('user_role', role);
+    setIsLoggedIn(true);
+    setCurrentRole(role);
+    refreshUser();
+    navigate(role === 'job-seeker' ? 'seeker-dashboard' : role === 'recruiter' ? 'recruiter-dashboard' : 'admin-dashboard');
   };
 
   const logout = () => {
     localStorage.removeItem('auth_token');
+    localStorage.removeItem('user_role');
+    localStorage.removeItem('last_page');
+    setIsLoggedIn(false);
     setCurrentRole(null);
     setUserData(null);
-    setIsLoggedIn(false);
     setCurrentPage('landing');
   };
 
   const toggleSidebar = () => {
-    setSidebarCollapsed((prev) => !prev);
-  };
-
-  const refreshUserData = async () => {
-    try {
-      const data = await authService.getCurrentUser();
-      setUserData(data);
-    } catch (error) {
-      console.error('Failed to refresh user data:', error);
-    }
+    setSidebarCollapsed(!sidebarCollapsed);
   };
 
   return (
-    <NavigationContext.Provider
-      value={{
-        currentPage,
-        currentRole,
-        isLoggedIn,
+    <NavigationContext.Provider 
+      value={{ 
+        currentPage, 
+        currentRole, 
         userData,
-        sidebarCollapsed,
+        isLoggedIn, 
+        sidebarCollapsed, 
         pageParams,
-        navigate,
-        login,
+        navigate, 
+        login, 
         logout,
         toggleSidebar,
-        refreshUserData,
+        refreshUser
       }}
     >
       {children}
@@ -170,8 +132,8 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
 
 export function useNavigation() {
   const context = useContext(NavigationContext);
-  if (!context) {
-    throw new Error('useNavigation must be used within NavigationProvider');
+  if (context === undefined) {
+    throw new Error('useNavigation must be used within a NavigationProvider');
   }
   return context;
 }

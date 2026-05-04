@@ -13,6 +13,7 @@ import { SeekerResume } from '@/pages/seeker/seeker-resume';
 import { SeekerGapAnalysis } from '@/pages/seeker/seeker-gap-analysis';
 import { SeekerRoadmap } from '@/pages/seeker/seeker-roadmap';
 import { SeekerApplications } from '@/pages/seeker/seeker-applications';
+import { SeekerJobPostings } from '@/pages/seeker/seeker-job-postings';
 import { SeekerProfile } from '@/pages/seeker/seeker-profile';
 
 // Recruiter Pages
@@ -69,6 +70,8 @@ function PageRouter() {
           return <SeekerRoadmap />;
         case 'seeker-applications':
           return <SeekerApplications />;
+        case 'seeker-job-postings':
+          return <SeekerJobPostings />;
         case 'seeker-profile':
           return <SeekerProfile />;
         // Recruiter pages

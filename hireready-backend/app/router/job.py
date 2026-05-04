@@ -5,7 +5,7 @@ from typing import List
 from app.database.connection import get_db
 from app.services.auth import get_current_user
 from app.schema.job import JobCreate, JobResponse
-from app.services.job_service import create_new_job_posting, get_recruiter_jobs
+from app.services.job_service import create_new_job_posting, get_recruiter_jobs, get_all_job_postings
 from app.services.gap_analysis_service import get_all_roles, get_all_skills
 
 router = APIRouter(
@@ -20,6 +20,26 @@ def get_jobs_metadata():
         "roles": get_all_roles(),
         "skills": get_all_skills()
     }
+
+@router.get("/", response_model=List[JobResponse])
+def get_all_jobs(
+    db: Session = Depends(get_db)
+):
+    """Returns all job postings."""
+    results = get_all_job_postings(db)
+    return [
+        JobResponse(
+            id=r[0],
+            recruiter_id=r[1],
+            title=r[2],
+            description=r[3],
+            required_skills=r[4],
+            experience_level=r[5],
+            work_location=r[6],
+            employment_type=r[7],
+            created_at=r[8]
+        ) for r in results
+    ]
 
 @router.post("/", response_model=JobResponse, status_code=status.HTTP_201_CREATED)
 def create_job(

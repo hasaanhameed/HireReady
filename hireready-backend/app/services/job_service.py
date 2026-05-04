@@ -39,3 +39,15 @@ def get_recruiter_jobs(db: Session, recruiter_id: str):
         """),
         {"rid": recruiter_id}
     ).fetchall()
+
+def get_all_job_postings(db: Session):
+    """
+    Retrieves all job postings from the database.
+    """
+    return db.execute(
+        text("""
+            SELECT id, recruiter_id, title, description, required_skills, experience_level, work_location, employment_type, created_at 
+            FROM job_postings 
+            ORDER BY created_at DESC
+        """)
+    ).fetchall()

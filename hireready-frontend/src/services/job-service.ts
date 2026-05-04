@@ -31,6 +31,11 @@ export const jobService = {
     const response = await axiosInstance.get<JobMetadata>('/jobs/meta');
     return response.data;
   },
+
+  getAllJobs: async (): Promise<JobResponse[]> => {
+    const response = await axiosInstance.get<JobResponse[]>('/jobs/');
+    return response.data;
+  },
   
   createJob: async (request: JobCreateRequest): Promise<JobResponse> => {
     const response = await axiosInstance.post<JobResponse>('/jobs/', request);

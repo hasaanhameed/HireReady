@@ -67,7 +67,7 @@ def login(login_data: LoginRequest, db: Session = Depends(get_db)):
         data={"sub": user.email, "role": user.role}
     )
     
-    return TokenResponse(access_token=access_token, token_type="bearer")
+    return TokenResponse(access_token=access_token, token_type="bearer", role=user.role)
     
 @router.get("/me", response_model=UserResponse)
 def read_users_me(current_user = Depends(get_current_user)):

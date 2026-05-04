@@ -12,7 +12,7 @@ export function useAuth() {
     try {
       const response = await authService.login(data);
       // Update global navigation state which handles token storage and user fetching
-      navLogin(response.access_token);
+      navLogin(response.access_token, response.role as any);
       return response;
     } finally {
       setIsLoading(false);
